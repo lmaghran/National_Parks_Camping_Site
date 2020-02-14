@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+#####Need Set Removal {'2573', '2621', '2609', '2554', '2617', '2616', '2586', '2576', '2602', '2589'}
+
 class Campsite(db.Model):
     """Data model for a human."""
 
@@ -12,7 +14,7 @@ class Campsite(db.Model):
 
     facility_id= db.Column(db.Integer, primary_key=True)
     parent_rec_area_id= db.Column(db.Integer, db.ForeignKey('rec_area_tbl.rec_area_id'))
-    campsite_name= db.Column(db.String(40))
+    campsite_name= db.Column(db.String(200))
     campsite_lat= db.Column(db.Float(15))
     campsite_long= db.Column(db.Float(15))
     campsite_json_latlong = db.Column(db.String(100))
@@ -30,7 +32,7 @@ class Recreation_area(db.Model):
 
     rec_area_id = db.Column(db.Integer, primary_key=True)
     rec_id_name = db.Column(db.String(5))
-    rec_name= db.Column(db.String(40))
+    rec_name= db.Column(db.String(200))
     rec_area_des= db.Column(db.Text())
     campsites=db.relationship("Campsite", 
               backref=db.backref("rec_area", order_by='Campsite.campsite_name'))
