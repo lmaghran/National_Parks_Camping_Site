@@ -8,11 +8,6 @@ headers={'User-Agent': 'Mozilla/5.0'}
 
 app = Flask(__name__)
 
-# # Required to use Flask sessions and the debug toolbar
-# app.secret_key = "ABC"
-
-# Normally, if you use an undefined variable in Jinja2, it fails silently.
-# This is horrible. Fix this so that, instead, it raises an error.
 app.jinja_env.undefined = StrictUndefined
 
 app = Flask(__name__)
@@ -31,27 +26,27 @@ def homepage():
 @app.route('/np_selected', methods=['GET'])
 def return_np_avail():
 #    """returns the availibility for campsites"""
+
     availibility_list=[]
+    availibility_url_list=[]
     selected_area= request.args.get('rec_area')
     start_date=request.args.get('start-date')
     end_date=request.args.get('end-date')
-    print(start_date)
-    print(end_date)
-
     rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
     selected_campsites= rec_area.campsites
 
     for campsite in selected_campsites:
         camp_id= campsite.facility_id
         availibility_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
+        availibility_url_list.append(availibility_url)
         avail_response = requests.get(availibility_url, headers=headers)
         avail_json_response= avail_response.json()
-        dict_keys= avail_dict['campsites'].keys()
-#########################stopping point- need to format for a better response
+        dict_keys= avail_json_response['campsites'].keys()
         availibility_list.append(avail_json_response) 
 
     return render_template("np_selected.html", 
-                            rec_area=rec_area, 
+                            rec_area=rec_area,
+                            availibility_url_list=availibility_url_list, 
                             selected_campsites= selected_campsites, 
                             availibility_list= availibility_list)
 

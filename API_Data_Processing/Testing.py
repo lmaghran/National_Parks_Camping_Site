@@ -20,7 +20,8 @@ for camp_rec_dict in campsite_data:
         missing_campsite_rec_id_list.append(camp_rec_dict)
 
 with open("Campsite_no_np.txt",'w') as rec_storage_file:
-    json.dump(missing_campsite_rec_id_list, rec_storage_file)
+    for line in missing_campsite_rec_id_list:
+        json.dump(str(line) + "\n", rec_storage_file)
 
 print(len(missing_campsite_rec_id_list))
 # for i, num in enumerate(campsite_rec_id_list):
