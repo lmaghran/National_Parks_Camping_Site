@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script
+      src="https://code.jquery.com/jquery-3.4.1.js"
+      integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+      crossorigin="anonymous">
+</script>
+
+    {% block content %}
+    <title></title>
+</head>
+<body>
+<h1>Tentative!  Find campsites in National Parks!<h1>
+<h2>Please select a national park below:<h2>
+    <form id="select-np" form action="/api/np_selected">
+    <label>
+        Enter a check-in date:
+    <input type="date" id="Start Date" name="start-date">
+    </label><br>
+
+    <label>
+        Enter a check-out date:
+    <input type="date" id="End Date" name="end-date">
+    </label><br><br><br>
+
+
+       <fieldset>
+          <legend>Select a National Park</legend>
+          <p>
+             <label>National Park List</label>
+            <select id = "npList" name="rec_area">
+            {% for rec_area in rec_areas %}
+            <option name="rec_area">{{ rec_area.rec_name }}</option>
+            {% endfor %}
+            </select>
+            <input type="submit">
+          </p>
+       </fieldset>
+    </form>
+
+{% endblock %}
+
+<div id="replacement"> REPLACEMENT TEXT </div>
+</body>
+
+<script>
+$('#select-np').on('submit', (evt) => {
+  evt.preventDefault();
+
+  const selectedStart = $('#start-date').val();
+  const selectedEnd = $('#end-date').val();
+  const selectedNp = $('#rec_area').val();
+
+
+  $.ajax({
+    url: `/api/np_selected`,
+    type: "get",
+    dataType: "json",
+    data: {
+      "start-date": selectedStart,
+      "end-date": selectedEnd,
+      "rec_area": selectedNp
+    },
+    success: console.log(selectedStart);
+    }})
+
+    ;
+  
+
+</script>
+
+
+</html>
