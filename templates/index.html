@@ -16,12 +16,12 @@
     <form id="select-np" form action="/api/np_selected">
     <label>
         Enter a check-in date:
-    <input type="date" id="Start Date" name="start-date">
+    <input type="date" id="start-date" name="start-date">
     </label><br>
 
     <label>
         Enter a check-out date:
-    <input type="date" id="End Date" name="end-date">
+    <input type="date" id="end-date" name="end-date">
     </label><br><br><br>
 
 
@@ -42,13 +42,14 @@
 {% endblock %}
 
 <div id="replacement"> REPLACEMENT TEXT </div>
-</body>
+
 
 <script>
 $('#select-np').on('submit', (evt) => {
   evt.preventDefault();
 
   const selectedStart = $('#start-date').val();
+  console.log(selectedStart);
   const selectedEnd = $('#end-date').val();
   const selectedNp = $('#rec_area').val();
 
@@ -62,13 +63,15 @@ $('#select-np').on('submit', (evt) => {
       "end-date": selectedEnd,
       "rec_area": selectedNp
     },
-    success: console.log(selectedStart);
-    }})
-
-    ;
-  
+    success: console.log(selectedStart)
+    })});
 
 </script>
+
+
+
+</body>
+
 
 
 </html>

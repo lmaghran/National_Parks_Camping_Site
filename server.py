@@ -40,20 +40,22 @@ def return_np_avail():
         availibility_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
         avail_response = requests.get(availibility_url, headers=headers)
         avail_json_response= avail_response.json() ### this is a dictionary
-        campsite_dictionary[campsite.campsite_name]= avail_json_response
-        campsite_dictionary["campground_lat"]= campsite.campsite_lat
-        campsite_dictionary["campground_long"]= campsite.campsite_long
-        for site in campsite_dictionary[campsite.campsite_name]['campsites']:
-            dates_stayed= len(campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities'])
+        # campsite_dictionary[campsite.campsite_name]= avail_json_response
+        campsite_dictionary[campsite.campsite_name]= {}
+        campsite_dictionary[campsite.campsite_name]["campground_lat"]= campsite.campsite_lat
+        campsite_dictionary[campsite.campsite_name]["campground_long"]= campsite.campsite_long
+        campsite_dictionary[campsite.campsite_name]["campground_id"]= campsite.facility_id
+        for site in avail_json_response['campsites']:
+            dates_stayed= len(avail_json_response['campsites'][site]['availabilities'])
             i=0
-            for availability in campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities']:
-                if campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities'][availability]=="Available":
+            for availability in avail_json_response['campsites'][site]['availabilities']:
+                if avail_json_response['campsites'][site]['availabilities'][availability]=="Available":
                     i+=1
 
             if i==dates_stayed:
-                availible_campsite_list.append(campsite_dictionary[campsite.campsite_name]['campsites'][site])
-    campsite_dictionary["availibility_data"]=availible_campsite_list
-    
+                availible_campsite_list.append(avail_json_response['campsites'][site])
+    campsite_dictionary[campsite.campsite_name]["availibility_data"]=availible_campsite_list
+
                 # if campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities']=="Available":
                 #     print(campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities'])
                 #     i+=1
