@@ -73,10 +73,12 @@ $('#select-np').on('submit', (evt) => {
       Object.keys(result).forEach(function (item) {
       console.log(result[item]);
 
+      if (result[item]['availibility_data']!= null) {
        // value
+
       let campList = $('<li><h2>'+ item + '</h2><br>' + JSON.stringify(result[item]['availibility_data']) +'</li>')
       $('#replacement').append(campList);
-      });
+      }});
     }
     });
 });
