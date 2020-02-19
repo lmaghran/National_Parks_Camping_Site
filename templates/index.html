@@ -13,14 +13,17 @@
 <body>
 <h1>Tentative!  Find campsites in National Parks!<h1>
 <h2>Please select a national park below:<h2>
-    <form id="select-np" form action="/api/np_selected">
+    <!-- <form id="select-np" form action="/api/np_selected"> -->
+      <form id="select-np" form action="/api/np_selected">
     <label>
         Enter a check-in date:
+    <!-- <input type="date" id="Start Date" name="start-date"> -->
     <input type="date" id="start-date" name="start-date">
     </label><br>
 
     <label>
         Enter a check-out date:
+    <!-- <input type="date" id="End Date" name="end-date"> -->
     <input type="date" id="end-date" name="end-date">
     </label><br><br><br>
 
@@ -31,7 +34,7 @@
              <label>National Park List</label>
             <select id = "npList" name="rec_area">
             {% for rec_area in rec_areas %}
-            <option name="rec_area">{{ rec_area.rec_name }}</option>
+            <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
             {% endfor %}
             </select>
             <input type="submit">
@@ -39,19 +42,22 @@
        </fieldset>
     </form>
 
-{% endblock %}
 
-<div id="replacement"> REPLACEMENT TEXT </div>
 
+<ul id="replacement"> Results List </ul>
+</body>
 
 <script>
 $('#select-np').on('submit', (evt) => {
   evt.preventDefault();
+  console.log("Prevented default")
 
   const selectedStart = $('#start-date').val();
-  console.log(selectedStart);
+  console.log("selectedStart is" + selectedStart);
   const selectedEnd = $('#end-date').val();
-  const selectedNp = $('#rec_area').val();
+  console.log("selectedEnd is" + selectedEnd);
+  const selectedNp = $('#npList').val();
+  console.log("selectedNP is" + selectedNp);
 
 
   $.ajax({
@@ -63,15 +69,19 @@ $('#select-np').on('submit', (evt) => {
       "end-date": selectedEnd,
       "rec_area": selectedNp
     },
-    success: console.log(selectedStart)
-    })});
+    success: function(result) {
+      Object.keys(result).forEach(function (item) {
+      console.log(result[item]);
+
+       // value
+      let campList = $('<li><h2>'+ item + '</h2><br>' + JSON.stringify(result[item]['availibility_data']) +'</li>')
+      $('#replacement').append(campList);
+      });
+    }
+    });
+});
 
 </script>
-
-
-
-</body>
-
-
+{% endblock %}
 
 </html>
