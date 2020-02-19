@@ -44,7 +44,7 @@
 
 
 
-<ul id="replacement"> Results List </ul>
+<ul id="replacement"> Campground List </ul>
 </body>
 
 <script>
@@ -73,11 +73,20 @@ $('#select-np').on('submit', (evt) => {
       Object.keys(result).forEach(function (item) {
       console.log(result[item]);
 
-      if (result[item]['availibility_data']!= null) {
+      let campsite = $('<li><h3 id="replacement">' + JSON.stringify(item) +'</li>')
+      $('#replacement').append(campsite);
+
+      if (result[item]['availibility_data']!= null){ 
        // value
 
-      let campList = $('<li><h2>'+ item + '</h2><br>' + JSON.stringify(result[item]['availibility_data']) +'</li>')
-      $('#replacement').append(campList);
+      for (campsite of result[item]['availibility_data']){
+        console.log(campsite);
+      
+
+      let campList = $('<li><h5 id=campsite_list>' + JSON.stringify(campsite["site"]) +"(availible site)" +'</li>')
+      $('#replacement').append(campList);}
+
+
       }});
     }
     });
