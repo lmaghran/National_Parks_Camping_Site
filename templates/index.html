@@ -9,6 +9,16 @@
 
     {% block content %}
     <title></title>
+
+<style>
+    #map
+    {
+    height:400px;
+    width:100%;
+    }
+</style>
+
+
 </head>
 <body>
 <h1>Tentative!  Find campsites in National Parks!<h1>
@@ -42,72 +52,26 @@
        </fieldset>
     </form>
 
-
+<h1> NP Map </h1>
+<div id="map"></div>
 
 <ul id="replacement"> Campground List </ul>
+
+
+
+
+<script src="/static/ajax.js"> </script>
+<script src="/static/googlemap.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGZpwieWbX6h5gSpxmyfMZ-HYZD_v8E6U&callback=initMap">
+</script>
+
+{% endblock %}
+
+
+
 </body>
 
-<script>
-$('#select-np').on('submit', (evt) => 
-{
-  evt.preventDefault();
-  console.log("Prevented default")
-
-  const selectedStart = $('#start-date').val();
-  console.log("selectedStart is" + selectedStart);
-  const selectedEnd = $('#end-date').val();
-  console.log("selectedEnd is" + selectedEnd);
-  const selectedNp = $('#npList').val();
-  console.log("selectedNP is" + selectedNp);
 
 
-  $.ajax(
-
-  {
-    url: `/api/np_selected`,
-    type: "get",
-    dataType: "json",
-    data: 
-    {
-      "start-date": selectedStart,
-      "end-date": selectedEnd,
-      "rec_area": selectedNp
-    },
-    success: function(result) 
-    {
-      Object.keys(result).forEach(function (item) 
-      {
-        console.log(result[item]);
-
-        let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
-        $('#replacement').append(campground);
-        console.log(String(result[item]['campground_id']))
-
-
-        if (result[item]['availibility_data']!= null)
-        { 
-         // value
-
-          for (campsite of result[item]['availibility_data'])
-          {
-            console.log(campsite);
-        
-          let campList = $("<li><h5 id='campsite-list'><a href='https://www.recreation.gov/camping/campsites/" + String(campsite['campsite_id']) + "'>" + String(campsite["site"]) +"(availible site)" +'</a></li>')
-            $('#replacement').append(campList);
-          }
-        }
-
-        else
-        {
-          let emptyCampsite = $('<li><h5>' + "No campsites available for these dates at this campground" +'</li>')
-          $('#replacement').append(emptyCampsite);
-        }
-      });
-    }});
-});
-
-
-</script>
-{% endblock %}
 
 </html>

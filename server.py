@@ -56,26 +56,6 @@ def return_np_avail():
                 availible_campsite_list.append(avail_json_response['campsites'][site])
     campsite_dictionary[campsite.campsite_name]["availibility_data"]=availible_campsite_list
 
-                # if campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities']=="Available":
-                #     print(campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities'])
-                #     i+=1
-            # for days in campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities']:
-            #     print(len(campsite_dictionary[campsite.campsite_name]['campsites'][site]['availabilities']))
-        
-        # # print(avail_json_response['campsites'])
-        # for site in avail_json_response["campsites"]:
-        #     # print(avail_json_response["campsites"][site])
-        #     # all_campsite_availibility= avail_list.append(site)
-        #     if avail_json_response["campsites"][site]['type_of_use']== 'Overnight':
-        #         campsite_dictionary[camp_id]= (site, avail_json_response["campsites"][site]['availabilities'])
-        #         availibility= avail_json_response["campsites"][site]['availabilities']
-        #         print(type(availibility))
-
-        #     else:
-        #         campsite_dictionary[camp_id]= (site,"Day use only")
-
-    # print(campsite_dictionary)
-    # # campsite_dictionary= campsite_dictionary)
     avail_json= jsonify(campsite_dictionary)
     return avail_json
 
