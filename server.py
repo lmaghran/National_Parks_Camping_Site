@@ -3,61 +3,52 @@ import requests
 from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Campsite, Recreation_area
-
-
+from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary
 
 app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
 app.secret_key= "ABC"
-headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" }
-
 
 @app.route("/", methods=['GET'])
 def homepage():
     """Show the homepage."""
     #A list of all recreation areas that include campsites, in abc order
-    rec_areas=Recreation_area.query.filter(Recreation_area.campsites != None).\
-            order_by(Recreation_area.rec_name).all()
-
+    rec_areas=rec_area_list()
+    
     return render_template("index.html", rec_areas=rec_areas)
 
 
 @app.route('/api/np_selected')
 def return_np_avail():
-#    """returns the availibility for campsites"""
+#    """returns the availibility for campsites in campgrounds in a national park"""
 
-    campsite_dictionary={}
-    availible_campsite_list=[]
     selected_area= request.args.get('rec_area')
     start_date=request.args.get('start-date')
     end_date=request.args.get('end-date')
-    #querying for name of rec area
-    rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
-    selected_campsites= rec_area.campsites #all campsites within the national park
-
-    for campsite in selected_campsites: # circling through list of campsites in a National Park
-        camp_id= campsite.facility_id
-        availibility_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
-        avail_response = requests.get(availibility_url, headers=headers)
-        avail_json_response= avail_response.json() ### this is a dictionary
-        # campsite_dictionary[campsite.campsite_name]= avail_json_response
-        campsite_dictionary[campsite.campsite_name]= {}
-        campsite_dictionary[campsite.campsite_name]["campground_lat"]= campsite.campsite_lat
-        campsite_dictionary[campsite.campsite_name]["campground_long"]= campsite.campsite_long
-        campsite_dictionary[campsite.campsite_name]["campground_id"]= campsite.facility_id
-        for site in avail_json_response['campsites']:
-            dates_stayed= len(avail_json_response['campsites'][site]['availabilities'])
-            i=0
-            for availability in avail_json_response['campsites'][site]['availabilities']:
-                if avail_json_response['campsites'][site]['availabilities'][availability]=="Available":
-                    i+=1
-
-            if i==dates_stayed:
-                availible_campsite_list.append(avail_json_response['campsites'][site])
-    campsite_dictionary[campsite.campsite_name]["availibility_data"]=availible_campsite_list
-
-    avail_json= jsonify(campsite_dictionary)
+    selected_campsites= get_campsites(selected_area)
+    avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
+    
     return avail_json
+
+@app.route('/api/all_campground_geodata')
+
+def return_all_campsite_geodata():
+
+    all_campsite_list=[]
+    all_campsites= Campsite.query.filter(Campsite.facility_id!= None).\
+    order_by(Campsite.campsite_name).all()
+
+    for campsite in all_campsites:
+        all_campsite_geodata={}
+        all_campsite_geodata['campground_name']=campsite.campsite_name
+        all_campsite_geodata['facility_id']= campsite.facility_id
+        all_campsite_geodata['lat']= campsite.campsite_lat
+        all_campsite_geodata['long']= campsite.campsite_long
+        all_campsite_list.append(all_campsite_geodata)
+    all_campsite_list= jsonify(all_campsite_list)
+
+    return all_campsite_list
+
 
 
 if __name__ == "__main__":
