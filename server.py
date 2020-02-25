@@ -38,14 +38,18 @@ def return_all_campsite_geodata():
     all_campsites= Campsite.query.filter(Campsite.facility_id!= None).\
     order_by(Campsite.campsite_name).all()
 
+    print(all_campsites)
+
     for campsite in all_campsites:
         all_campsite_geodata={}
         all_campsite_geodata['campground_name']=campsite.campsite_name
         all_campsite_geodata['facility_id']= campsite.facility_id
         all_campsite_geodata['lat']= campsite.campsite_lat
         all_campsite_geodata['long']= campsite.campsite_long
+        all_campsite_geodata['geojson']= campsite.campsite_json_latlong
         all_campsite_list.append(all_campsite_geodata)
-    all_campsite_list= jsonify(all_campsite_list)
+
+    all_campsite_list = jsonify(all_campsite_list)
 
     return all_campsite_list
 

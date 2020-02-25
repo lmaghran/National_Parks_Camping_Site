@@ -40,6 +40,7 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
 
     for campsite in selected_campsites: # circling through list of campsites in a National Park
         camp_id= campsite.facility_id
+        print(campsite.campsite_type)
         avail_dict= get_avail_dictionary(camp_id, start_date, end_date)
         # campsite_dictionary[campsite.campsite_name]= avail_json_response
         campsite_dictionary[campsite.campsite_name]= {}

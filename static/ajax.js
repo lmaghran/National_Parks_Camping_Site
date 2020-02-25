@@ -22,7 +22,7 @@ $('#select-np').on('submit', (evt) =>
     },
     success: function(result) 
     {
-      Object.keys(result).forEach(function (item) 
+      Object.keys(result).forEach(function (item)
       {
         console.log(result[item]);
 
