@@ -1,4 +1,3 @@
-
 function initMap() {
 
   //// map options
@@ -9,6 +8,7 @@ function initMap() {
 
   ///new map
   var map = new google.maps.Map(document.getElementById('map'), options);
+
 
 //to add markers to map
 function addMarker(params){
@@ -33,9 +33,7 @@ $.get("/api/all_campground_geodata", function(data){
     for (var i = 0; i<data.length; i++){
     addMarker({coords:{lat:data[i].lat, lng:data[i].long},
               content: data[i].campground_name
-  });
-      }
-
-    });
-
+});
+}
+});
 }

@@ -25,7 +25,7 @@
 <h1>Tentative!  Find campsites in National Parks!<h1>
 <h2>Please select a national park below:<h2>
     <!-- <form id="select-np" form action="/api/np_selected"> -->
-      <form id="select-np" form action="/api/np_selected">
+    <form id="select-np" form action="/api/np_selected">
     <label>
         Enter a check-in date:
     <!-- <input type="date" id="Start Date" name="start-date"> -->
@@ -53,15 +53,16 @@
        </fieldset>
     </form>
 
-<h1> NP Map </h1>
+<h1 id="mapdiv"> NP Map </h1>
 <div id="map"></div>
 
-<ul id="replacement"> Campground List </ul>
+<h2>Campground List</h2>
+<ul id="replacement"> </ul>
+
 
 
 <script src="/static/ajax.js"> </script>
 <script src="/static/googlemap.js"></script>
->
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGZpwieWbX6h5gSpxmyfMZ-HYZD_v8E6U&callback=initMap">
 </script>
 
