@@ -40,7 +40,6 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
 
     for campsite in selected_campsites: # circling through list of campsites in a National Park
         camp_id= campsite.facility_id
-        print(campsite.campsite_type)
         avail_dict= get_avail_dictionary(camp_id, start_date, end_date)
         # campsite_dictionary[campsite.campsite_name]= avail_json_response
         campsite_dictionary[campsite.campsite_name]= {}
@@ -60,7 +59,7 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
     if len(availible_campsite_list)!=0:
         campsite_dictionary[campsite.campsite_name]["availibility_data"]=availible_campsite_list
 
-    avail_json= jsonify(campsite_dictionary)
+    avail_json= campsite_dictionary
     return avail_json
 
 
@@ -74,13 +73,24 @@ def return_cg_lat_long():
         all_campsite_geodata[campsite.campsite_name]['facility_id']= campsite.facility_id
         all_campsite_geodata[campsite.campsite_name]['campsite_lat']= campsite.campsite_lat
         all_campsite_geodata[campsite.campsite_name]['campsite_long']= campsite.campsite_long
+        all_campsite_geodata[campsite.campsite_name]['availibility']= 'unknown'
 
 
     jsonify(all_campsite_geodata)
-    return 
+    return
 
 def all_campsites():
+    all_campsite_list=[]
     all_campsites= Campsite.query.filter(Campsite.facility_id!= None).\
     order_by(Campsite.campsite_name).all()
 
-    return all_campsites
+    for campsite in all_campsites:
+        all_campsite_geodata={}
+        all_campsite_geodata['campground_name']=campsite.campsite_name
+        all_campsite_geodata['facility_id']= campsite.facility_id
+        all_campsite_geodata['lat']= campsite.campsite_lat
+        all_campsite_geodata['long']= campsite.campsite_long
+        all_campsite_geodata['availibility']= 'unknown'
+        all_campsite_list.append(all_campsite_geodata)
+
+    return all_campsite_list

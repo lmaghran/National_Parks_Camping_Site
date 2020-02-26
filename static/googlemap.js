@@ -1,10 +1,13 @@
 function initMap() {
   console.log("google map init map function");
 
+  var zoom = 4
+  var center= {lat: 39.8283, lng: -98.5795}
+
   //// map options
   var options = {
-    zoom: 4,
-    center: {lat: 39.8283, lng: -98.5795}
+    zoom: zoom,
+    center: center
   }
 
   ///new map
@@ -33,15 +36,13 @@ function addMarker(params){
 
 let fill= "#79c1f1"
 
-  let icon= {path: google.maps.SymbolPath.CIRCLE, scale: 8.5, fillColor: '#F00',
-      fillOpacity: 0.4, strokeWeight: 0.4}
-
 /// loop through markers
 $.get("/api/all_campground_geodata", function(data){
     for (var i = 0; i<data.length; i++){
     addMarker({coords:{lat:data[i].lat, lng:data[i].long},
               content: data[i].campground_name,
-              icon: icon});
+              icon: {path: google.maps.SymbolPath.CIRCLE, scale: 8.5, fillColor: fill,
+                      fillOpacity: 0.4, strokeWeight: 0.4}});
 }
 });
 }

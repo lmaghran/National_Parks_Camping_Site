@@ -2,6 +2,7 @@ function ajaxandmap(result)
     {
       Object.keys(result).forEach(function(item)
       {
+        if ((String(item)) !== 'mapping_list'){
 
         let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
         $('#replacement').append(campground);
@@ -23,7 +24,10 @@ function ajaxandmap(result)
           let emptyCampsite = $('<li><h5>' + "No campsites available for these dates at this campground" +'</li>')
           $('#replacement').append(emptyCampsite);
         }
+
+      }
       });
+
 
 console.log("after looping")
   $('#map').remove();
@@ -31,9 +35,7 @@ console.log("after looping")
   $('#mapdiv').append(createmapdiv);
   initMap()
 
-  addMarker({coords:{lat:data[i].lat, lng:data[i].long},
-            content: data[i].campground_name,
-            icon: icon});
+
 //   function initMap() {
 //     console.log("ajax init map function call");
 
@@ -102,4 +104,5 @@ $('#select-np').on('submit', (evt) => {
 
   });
 });
+
 
