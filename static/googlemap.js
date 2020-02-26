@@ -1,4 +1,5 @@
 function initMap() {
+  console.log("google map init map function");
 
   //// map options
   var options = {
