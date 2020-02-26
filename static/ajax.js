@@ -29,8 +29,11 @@ console.log("after looping")
   $('#map').remove();
   let createmapdiv = $('<div id="map"></div>')
   $('#mapdiv').append(createmapdiv);
-  console.log("before map init")
   initMap()
+
+  addMarker({coords:{lat:data[i].lat, lng:data[i].long},
+            content: data[i].campground_name,
+            icon: icon});
 //   function initMap() {
 //     console.log("ajax init map function call");
 
@@ -99,5 +102,4 @@ $('#select-np').on('submit', (evt) => {
 
   });
 });
-
 
