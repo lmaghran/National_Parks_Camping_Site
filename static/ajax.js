@@ -2,6 +2,7 @@ function ajaxandmap(result)
     {
       Object.keys(result).forEach(function(item)
       {
+        
         if ((String(item)) !== 'mapping_list'){
 
         let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
@@ -29,54 +30,13 @@ function ajaxandmap(result)
       });
 
 
-console.log("after looping")
+  console.log("after looping")
   $('#map').remove();
   let createmapdiv = $('<div id="map"></div>')
   $('#mapdiv').append(createmapdiv);
+
+  if (Object.keys(result).length > 1)
   initMap()
-
-
-//   function initMap() {
-//     console.log("ajax init map function call");
-
-//     //// map options
-//   let options = {
-//   zoom: 4,
-//   center: {lat: 39.8283, lng: -98.5795}
-//     }
-
-//   ///new map
-//   let map = new google.maps.Map(document.getElementById('map'), options);
-
-// //to add markers to map
-// function addMarker(params){
-//   var marker= new google.maps.Marker({
-//     position: params.coords,
-//     map: map
-
-//     });
-
-//   var infoWindow= new google.maps.InfoWindow({
-//     content: params.content
-//   });
-
-//   marker.addListener('click', function(){
-//     infoWindow.open(map, marker)
-//   });
-
-// }
-
-
-
-// /// loop through markers
-// $.get("/api/all_campground_geodata", function(data){
-//     for (var i = 0; i<data.length; i++){
-//     addMarker({coords:{lat:data[i].lat, lng:data[i].long},
-//               content: data[i].campground_name
-// });
-// }
-// });
-// }
 };
 
 

@@ -21,8 +21,24 @@ def homepage():
 @app.route('/api/np_selected')
 def return_np_avail():
 #    """returns the availibility for campsites in campgrounds in a national park"""
+    avail_json={}
+    availible_campsite_list=[]
+    selected_campsites= []
+    np_campground_names=[]
 
-    all_campsite_list= all_campsites()
+    all_campsite_list=[]
+    all_campsites= Campsite.query.filter(Campsite.facility_id!= None).order_by(Campsite.campsite_name).all()
+
+    for campsite in all_campsites:
+        all_campsite_geodata={}
+        all_campsite_geodata['campground_name']=campsite.campsite_name
+        all_campsite_geodata['facility_id']= campsite.facility_id
+        all_campsite_geodata['lat']= campsite.campsite_lat
+        all_campsite_geodata['long']= campsite.campsite_long
+        all_campsite_geodata['availibility']= 'unknown'
+        all_campsite_list.append(all_campsite_geodata)
+
+
     if request.args.get('rec_area') != None:
         selected_area= request.args.get('rec_area')
 
@@ -31,27 +47,31 @@ def return_np_avail():
 
     if request.args.get('end-date') != None:
         end_date=request.args.get('end-date')
-
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
 
 
-    all_campsite_list= all_campsites()
+    for campsite in selected_campsites:
+        np_campground_names.append(campsite.campsite_name)
 
-    for campsite in all_campsite_list:
-        if campsite["campground_name"] in selected_campsites:      
-            
-            if avail_json[campsite.campsite_name].get("availibility_data") != None:
-                campsite["availibility"]= 'Availible for these dates'
-/////////////////////////////////////////////////////////////////////////////////Stopped here
+    for campground in all_campsite_list:
+        name= campground['campground_name']
+
+        if name in np_campground_names:
+
+            if avail_json[name].get('availibility_data') != None:
+                campground["availibility"]= 'Availible for these dates'
 
             else:
-                all_campsite_geodata['availibility']= 'Not availible for these dates'
+                campground['availibility']= 'Not availible for these dates'
 
         else:
-            all_campsite_geodata['availibility']= 'Availibility Unknown'
+            campground['availibility']= 'Availibility Unknown'
+
 
     avail_json['mapping_list'] = all_campsite_list
+    print(avail_json.keys())
+
  
     return jsonify(avail_json)
 
