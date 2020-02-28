@@ -34,8 +34,8 @@ function initMap(){
 
   ///new map
   map = new google.maps.Map(document.getElementById('map'), options);
-  console.log(map)
 
+//API call to add the initial markers to the map
 $.get("/api/np_selected", function(data){
     for (campground of data.mapping_list){
       if (campground.availibility === 'Availible for these dates'){
@@ -57,9 +57,7 @@ $.get("/api/np_selected", function(data){
     markers.push(marker)
 
     }
-
 });
-
 }
 
 
@@ -100,6 +98,8 @@ function ajaxandmap(result) {
   for (campground of result.mapping_list){
       if (campground.availibility === 'Availible for these dates'){
       var fill = "#0F9D58";
+      map.setCenter({lat:campground.lat, lng:campground.long})
+
       }
       else if (campground.availibility === 'Not availible for these dates'){
       var fill = "#DB4437";
@@ -113,11 +113,11 @@ function ajaxandmap(result) {
 
       var marker = marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
                   content: campground.campground_name, icon: icon, map:map});
+    }
+      map.setZoom(8)
 
-      console.log(campground.campground_name)
 
-  }
-  };
+};
 
 
 ////AJAX Call after user clicks the submit button
