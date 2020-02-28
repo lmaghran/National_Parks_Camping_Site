@@ -54,6 +54,7 @@ def return_np_avail():
     for campsite in selected_campsites:
         np_campground_names.append(campsite.campsite_name)
 
+    # renames items based on their availibility
     for campground in all_campsite_list:
         name= campground['campground_name']
 
@@ -71,7 +72,6 @@ def return_np_avail():
 
     avail_json['mapping_list'] = all_campsite_list
     print(avail_json.keys())
-
  
     return jsonify(avail_json)
 
