@@ -11,9 +11,16 @@ function addMarker(params){
 
     });
 
-  var infoWindow= new google.maps.InfoWindow({
-    content: params.content
-  });
+  var contentString = '<div id="content">'+
+      '<div id="siteNotice">'+
+      params.name+'<br>'+
+      '<a href=https://www.recreation.gov/camping/campgrounds/'+
+      params.facility_id+" target='_blank'>"+
+      "Go to this website"+
+      '</a>'+'</div>';
+
+  var infoWindow= new google.maps.InfoWindow({content:contentString});
+
 
   marker.addListener('click', function(){
     infoWindow.open(map, marker)
@@ -52,7 +59,8 @@ $.get("/api/np_selected", function(data){
     fillOpacity: 0.4, strokeWeight: 0.4}
 
     marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
-            content: campground.campground_name, icon: icon, map:map});
+            name: campground.campground_name, icon: icon, map:map, 
+            facility_id:campground.facility_id});
 
     markers.push(marker)
 
