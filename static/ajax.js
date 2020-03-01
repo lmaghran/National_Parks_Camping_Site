@@ -6,21 +6,23 @@ function addMarker(params){
   var marker= new google.maps.Marker({
     position: params.coords,
     map:map,
-    icon: params.icon,
-    content: params.content,
+    icon: params.icon
 
     });
 
-  var contentString = '<div id="content">'+
+  var contentString = 
+      '<div id="content">'+
       '<div id="siteNotice">'+
-      params.name+'<br>'+
+      params.content+'<br>'+
       '<a href=https://www.recreation.gov/camping/campgrounds/'+
-      params.facility_id+" target='_blank'>"+
+      params.fac_id +" target='_blank'>"+
       "Go to this website"+
       '</a>'+'</div>';
 
-  var infoWindow= new google.maps.InfoWindow({content:contentString});
 
+  var infoWindow= new google.maps.InfoWindow({
+    content: contentString
+  });
 
   marker.addListener('click', function(){
     infoWindow.open(map, marker)
@@ -55,12 +57,14 @@ $.get("/api/np_selected", function(data){
       var fill= "#79c1f1";
       }
 
+      console.log(campground.campground_name);
+
     let icon= {path: google.maps.SymbolPath.CIRCLE, scale: 8.5, fillColor: fill,
     fillOpacity: 0.4, strokeWeight: 0.4}
 
     marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
-            name: campground.campground_name, icon: icon, map:map, 
-            facility_id:campground.facility_id});
+            content: campground.campground_name, fac_id:campground.facility_id,
+           icon: icon, map:map});
 
     markers.push(marker)
 
@@ -106,11 +110,12 @@ function ajaxandmap(result) {
   for (campground of result.mapping_list){
       if (campground.availibility === 'Availible for these dates'){
       var fill = "#0F9D58";
-      map.setCenter({lat:campground.lat, lng:campground.long})
+      map.setCenter({lat:campground.lat, lng:campground.long});
 
       }
       else if (campground.availibility === 'Not availible for these dates'){
       var fill = "#DB4437";
+      map.setCenter({lat:campground.lat, lng:campground.long});
       }
       else if (campground.availibility === 'Availibility Unknown'){
       var fill= "#79c1f1";
@@ -120,7 +125,8 @@ function ajaxandmap(result) {
         fillOpacity: 0.4, strokeWeight: 0.4};
 
       var marker = marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
-                  content: campground.campground_name, icon: icon, map:map});
+                  content: campground.campground_name, fac_id: campground.facility_id,
+                  icon: icon, map:map});
     }
       map.setZoom(8)
 
