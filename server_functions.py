@@ -1,6 +1,8 @@
 from model import connect_to_db, db, Campsite, Recreation_area
 from flask import Flask, jsonify, render_template, request
 import requests
+import os
+
 
 # def rec_area_list():
 #     print(Recreation_area)
@@ -94,3 +96,82 @@ def all_campsites():
         all_campsite_list.append(all_campsite_geodata)
 
     return all_campsite_list
+
+def get_np_code(selected_area):
+
+    #querying for name of rec area
+    rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
+    np_code= rec_area.rec_id_name
+
+    return np_code
+
+# def get_nps_photos(nps_code):
+#     nps_api_key= os.environ['NPS_API_KEY']
+#     print(nps_api_key)
+#     headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+
+#     url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&api_key={nps_api_key}"
+
+#     response = requests.get(url, headers=headers)
+#     json_resp= response.json()
+#     print(json_resp['data'].keys())
+    ###### Stopped here to retrieve photos
+        
+    print(json_resp)
+
+
+
+def generate_availibility_dictionary():
+    ## Returns dictionary for mapping and availibility
+    avail_json={}
+    availible_campsite_list=[]
+    selected_campsites= []
+    np_campground_names=[]
+
+    all_campsite_list=[]
+    all_campsites= Campsite.query.filter(Campsite.facility_id!= None).order_by(Campsite.campsite_name).all()
+
+    for campsite in all_campsites:
+        all_campsite_geodata={}
+        all_campsite_geodata['campground_name']=campsite.campsite_name
+        all_campsite_geodata['facility_id']= campsite.facility_id
+        all_campsite_geodata['lat']= campsite.campsite_lat
+        all_campsite_geodata['long']= campsite.campsite_long
+        all_campsite_geodata['availibility']= 'unknown'
+        all_campsite_list.append(all_campsite_geodata)
+
+
+    if request.args.get('rec_area') != None:
+        selected_area= request.args.get('rec_area')
+        # nps_code= get_np_code(selected_area)
+        # get_nps_photos(nps_code)
+
+
+    if request.args.get('start-date') != None:
+        start_date=request.args.get('start-date')
+
+    if request.args.get('end-date') != None:
+        end_date=request.args.get('end-date')
+        selected_campsites= get_campsites(selected_area)
+        avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
+
+
+    for campsite in selected_campsites:
+        np_campground_names.append(campsite.campsite_name)
+
+    # renames items based on their availibility
+    for campground in all_campsite_list:
+        name= campground['campground_name']
+
+        if name in np_campground_names:
+            if avail_json[name].get('availibility_data') != None:
+                campground["availibility"]= 'Availible for these dates'
+            else:
+                campground['availibility']= 'Not availible for these dates'
+        else:
+            campground['availibility']= 'Availibility Unknown'
+
+
+    avail_json['mapping_list'] = all_campsite_list
+
+    return avail_json
