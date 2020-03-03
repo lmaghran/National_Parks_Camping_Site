@@ -2,6 +2,7 @@ from model import connect_to_db, db, Campsite, Recreation_area
 from flask import Flask, jsonify, render_template, request
 import requests
 import os
+import random
 
 
 # def rec_area_list():
@@ -18,6 +19,29 @@ def rec_area_list():
 
     return rec_areas
 
+def random_images(rec_areas):
+    random_images=[]
+
+    while len(random_images)<9:
+        Recreation_area.query.filter(Recreation_area.campsites != None).\
+        order_by(Recreation_area.rec_name).all()
+        random_np= random.choice(rec_areas)
+        random_id= random_np.rec_id_name
+        image_list=get_nps_photos(random_id)
+        random_images+=image_list
+
+
+        # photo_list= get_nps_photos(nps_code)
+
+        # print(photo_list)
+    print(random_images)
+    return random_images[:8]
+
+
+
+
+
+
 def get_campsites(selected_area):
 
     #querying for name of rec area
@@ -33,6 +57,7 @@ def get_avail_dictionary(camp_id, start_date, end_date):
     avail_dict_response= avail_json_response.json() ### this is a dictionary
 
     return avail_dict_response
+
 
 
 def generate_campsite_dictionary(selected_campsites, start_date, end_date):
@@ -97,27 +122,29 @@ def all_campsites():
 
     return all_campsite_list
 
-def get_np_code(selected_area):
+def get_nps_code(selected_area):
 
     #querying for name of rec area
     rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
-    np_code= rec_area.rec_id_name
+    nps_code= rec_area.rec_id_name
 
-    return np_code
+    return nps_code
 
-# def get_nps_photos(nps_code):
-#     nps_api_key= os.environ['NPS_API_KEY']
-#     print(nps_api_key)
-#     headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+def get_nps_photos(nps_code):
 
-#     url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&api_key={nps_api_key}"
+    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
+    nps_api_key= os.environ['NPS_API_KEY']
 
-#     response = requests.get(url, headers=headers)
-#     json_resp= response.json()
-#     print(json_resp['data'].keys())
-    ###### Stopped here to retrieve photos
-        
-    print(json_resp)
+    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
+
+    response = requests.get(url, headers=headers)
+    json_resp= response.json()
+    image_list=json_resp['data'][0]['images']
+
+    return image_list
+
+
 
 
 
@@ -143,8 +170,8 @@ def generate_availibility_dictionary():
 
     if request.args.get('rec_area') != None:
         selected_area= request.args.get('rec_area')
-        # nps_code= get_np_code(selected_area)
-        # get_nps_photos(nps_code)
+        nps_code= get_nps_code(selected_area)
+        image_list= get_nps_photos(nps_code)
 
 
     if request.args.get('start-date') != None:
@@ -154,6 +181,7 @@ def generate_availibility_dictionary():
         end_date=request.args.get('end-date')
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
+        avail_json['images']= image_list
 
 
     for campsite in selected_campsites:
