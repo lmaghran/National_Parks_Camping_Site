@@ -30,15 +30,45 @@ def random_images(rec_areas):
         image_list=get_nps_photos(random_id)
         random_images+=image_list
 
+    return random_images[:7]
 
-        # photo_list= get_nps_photos(nps_code)
+def get_np_info(selected_area):
+    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
+    nps_api_key= os.environ['NPS_API_KEY']
+    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+    nps_code= get_nps_code(selected_area)
+    print(nps_code)
+    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
+    response = requests.get(url, headers=headers)
+    json_resp= response.json()
+    np_info=json_resp['data'][0]
+    ##nps_dict['data'][0]['description'] - description of park
+    ##image_list=json_resp['data'][0]['images']
 
-        # print(photo_list)
-    print(random_images)
-    return random_images[:8]
+    return np_info
 
 
 
+
+def get_nps_code(selected_area):
+
+    #querying for name of rec area
+    rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
+    nps_code= rec_area.rec_id_name
+
+    return nps_code
+
+def get_nps_photos(nps_code):
+
+    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
+    nps_api_key= os.environ['NPS_API_KEY']
+    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
+    response = requests.get(url, headers=headers)
+    json_resp= response.json()
+    image_list=json_resp['data'][0]['images']
+
+    return image_list
 
 
 
@@ -121,30 +151,6 @@ def all_campsites():
         all_campsite_list.append(all_campsite_geodata)
 
     return all_campsite_list
-
-def get_nps_code(selected_area):
-
-    #querying for name of rec area
-    rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
-    nps_code= rec_area.rec_id_name
-
-    return nps_code
-
-def get_nps_photos(nps_code):
-
-    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
-    nps_api_key= os.environ['NPS_API_KEY']
-
-    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
-    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
-
-    response = requests.get(url, headers=headers)
-    json_resp= response.json()
-    image_list=json_resp['data'][0]['images']
-
-    return image_list
-
-
 
 
 

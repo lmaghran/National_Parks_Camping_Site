@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+
+    {% block content %}
+    <title></title>
+</head>
+<body>
+<form id="select-np" form action="/np_selected">
+    <fieldset>
+        <legend>Select a National Park</legend>
+        <p>
+        <label>National Park List</label>
+        <select id = "npList" name="rec_area">
+        {% for rec_area in rec_areas %}
+        <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
+        {% endfor %}
+        </select>
+        <input type="submit">
+      </p>
+    </fieldset>
+
+
+{% for image in random_images %}
+
+<img class="rand_picture"
+     src="{{ image['url'] }}"
+     alt="">
+
+
+{% endfor %}
+
+
+{% endblock %}
+
+
+</body>
+</html>  

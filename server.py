@@ -4,7 +4,7 @@ from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Campsite, Recreation_area
 import random
-from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, all_campsites, generate_availibility_dictionary, get_nps_code, random_images
+from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, all_campsites, generate_availibility_dictionary, get_nps_code, random_images, get_np_info
 
 app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
@@ -19,6 +19,25 @@ def homepage():
     random_img_lst= random_images(rec_areas)
     
     return render_template("index.html", rec_areas=rec_areas, random_images= random_img_lst)
+
+@app.route("/random_np_photos", methods=['GET'])
+def ran_np_photos():
+#A list of all recreation areas that include campsites, in abc order
+    rec_areas=rec_area_list()
+    random_img_lst= random_images(rec_areas)
+    
+    return render_template("index2.html", rec_areas=rec_areas, random_images= random_img_lst)
+
+@app.route("/np_selected", methods=['GET'])
+def get_np():
+
+    selected_area= request.args.get('rec_area')
+    np_info= get_np_info(selected_area)
+    description= np_info['description']
+    ##image_list=json_resp['data'][0]['images']
+
+    return render_template("npselected.html", np_info=np_info, description=description)
+
 
 
 @app.route('/api/np_selected')

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+
+
+    {% block content %}
+    <title></title>
+</head>
+<body>
+
+<h1>
+    {{ np_info }}
+{{ np_info['fullName'] }}
+<h1>
+
+<h2>
+{{ description }}
+</h2>
+
+<h2>
+Driving Directions:
+{{ np_info['directionsInfo'] }}
+</h2>
+
+{% for image in np_info['images'] %}
+
+<img class="picture"
+     src="{{ image['url'] }}"
+     alt="{{ image['altText'] }}">
+<h2> {{ image['caption']}} </h2>
+
+
+
+{% endfor %}
+
+
+{% endblock %}
+
+
+</body>
+</html>  
