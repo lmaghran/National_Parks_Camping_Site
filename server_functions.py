@@ -187,7 +187,7 @@ def generate_availibility_dictionary():
         end_date=request.args.get('end-date')
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
-        avail_json['images']= image_list
+        # avail_json['images']= image_list
 
 
     for campsite in selected_campsites:

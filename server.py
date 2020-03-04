@@ -12,15 +12,6 @@ app.secret_key= "ABC"
 
 
 @app.route("/", methods=['GET'])
-def homepage():
-    """Show the homepage."""
-    #A list of all recreation areas that include campsites, in abc order
-    rec_areas=rec_area_list()
-    random_img_lst= random_images(rec_areas)
-    
-    return render_template("index.html", rec_areas=rec_areas, random_images= random_img_lst)
-
-@app.route("/random_np_photos", methods=['GET'])
 def ran_np_photos():
 #A list of all recreation areas that include campsites, in abc order
     rec_areas=rec_area_list()
@@ -28,33 +19,32 @@ def ran_np_photos():
     
     return render_template("index2.html", rec_areas=rec_areas, random_images= random_img_lst)
 
+
+
 @app.route("/np_selected", methods=['GET'])
 def get_np():
 
+    rec_areas=rec_area_list()
     selected_area= request.args.get('rec_area')
     np_info= get_np_info(selected_area)
     description= np_info['description']
+
+    return render_template("npselected.html", np_info=np_info, description=description, rec_areas=rec_areas)
+
+@app.route("/api/np", methods=['GET'])
+def get_nps_info():
+    selected_area= request.args.get('rec_area')
+    np_info= get_np_info(selected_area)
     ##image_list=json_resp['data'][0]['images']
 
-    return render_template("npselected.html", np_info=np_info, description=description)
-
+    return jsonify(np_info)
 
 
 @app.route('/api/np_selected')
 def return_np_avail():
 #    """returns the availibility for campsites in campgrounds in a national park"""
-
     avail_json= generate_availibility_dictionary()
-
     return jsonify(avail_json)
-
-@app.route('/api/all_campground_geodata')
-
-def return_all_campsite_geodata():
-
-    all_campsite_list= all_campsites()
-    all_campsite_list = jsonify(all_campsite_list)
-    return all_campsite_list
 
 
 

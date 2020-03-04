@@ -1,45 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <title></title>
+
+
+<style>
+    #map
+    {
+    height:400px;
+    width:100%;
+    }
+    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
+</style>
+
+<style type="text/css">
+ .row { vertical-align: top; height:auto !important; }
+ .list {display:none; }
+ .show {display: none; }
+ .hide:target + .show {display: inline; }
+ .hide:target {display: none; }
+ .hide:target ~ .list {display:inline; }
+ @media print { .hide, .show { display: none; } }
+ </style>
+
+
+
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
 
-
     {% block content %}
     <title></title>
 </head>
 <body>
+    <h1>Tentative!  Find campsites in National Parks!<h1>
+    <h2>Please select a national park below:<h2>
 
-<h1>
-    {{ np_info }}
-{{ np_info['fullName'] }}
-<h1>
-
-<h2>
-{{ description }}
-</h2>
-
-<h2>
-Driving Directions:
-{{ np_info['directionsInfo'] }}
-</h2>
-
-{% for image in np_info['images'] %}
-
-<img class="picture"
-     src="{{ image['url'] }}"
-     alt="{{ image['altText'] }}">
-<h2> {{ image['caption']}} </h2>
+    <form id="np-info" form action="/api/np">
+       <fieldset>
+          <legend>Select a National Park</legend>
+          <p>
+             <label>National Park List</label>
+            <select id = "npList" name="rec_area">
+                    {% for rec_area in rec_areas %}
+                            <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
+                    {% endfor %}
+            </select>
+          </p>
+       </fieldset>
+    </form>
+    <form id="select-np" form action="/api/np_selected">
 
 
+       <fieldset>
+            <label>
+        Enter a check-in date:
+    <!-- <input type="date" id="Start Date" name="start-date"> -->
+    <input type="date" id="start-date" name="start-date">
+    </label><br>
 
-{% endfor %}
+    <label>
+        Enter a check-out date:
+    <!-- <input type="date" id="End Date" name="end-date"> -->
+    <input type="date" id="end-date" name="end-date">
+    </label><br><br><br>
+            <input type="submit">
+          </p>
+       </fieldset>
+    </form>
 
 
-{% endblock %}
 
 
+
+
+    <div id="nps-info">
+        <h1 id="nps-name"> {{ np_info['fullName'] }} </h1>
+            <h2 id="nps-description"> {{ np_info['description'] }} </h2>
+            <h2 id= "nps-directions"> Driving Directions: {{ np_info['directionsInfo'] }} </h2>
+
+        <div id="images">
+
+        {% for image in np_info['images'] %}
+                <img class="image"
+                src="{{ image['url'] }}"
+                alt="{{ image['altText'] }}">
+                <h3> {{ image['caption']}} </h3><br>
+
+        {% endfor %}
+        </div>
+    </div>
+
+<h1 id="mapdiv"> NP Map </h1>
+<div id="map"></div>
+
+<h2>Campground List</h2>
+<ul id="replacement"> </ul>
+
+
+
+<script src="/static/ajax.js"> </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGZpwieWbX6h5gSpxmyfMZ-HYZD_v8E6U&callback=initMap">
+</script>
+
+
+
+    {% endblock %}
+
+<script src="/static/nps_ajax.js"> </script>
 </body>
+
+
 </html>  

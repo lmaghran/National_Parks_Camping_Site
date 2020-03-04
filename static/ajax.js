@@ -135,7 +135,7 @@ function ajaxandmap(result) {
 
 
 ////AJAX Call after user clicks the submit button
-$('#select-np').on('submit', (evt) => {
+$('#select-np').on('submit',  (evt) => {
   evt.preventDefault();
   
 
@@ -156,3 +156,46 @@ $('#select-np').on('submit', (evt) => {
 
   });
 });
+
+////AJAX Call for the user clicking a national park
+$('#np-info').on('click',  (evt) => {
+  evt.preventDefault();
+
+  const selectedNp = $('#npList').val();
+
+  $.ajax( {
+    url: `/api/np`,
+    type: "get",
+    data: {
+    "rec_area": selectedNp
+    },
+    success: (result) => {
+      console.log(result);
+
+      console.log(result['latLong'])
+      map.setCenter({lat:Number(result['latitude']), lng: Number(result['longitude'])});
+      map.setZoom(8)
+
+    // map.setCenter({result['latLong']});
+
+    $('#nps-name').text(String(result['fullName']));
+    // $('#nps-description').empty();
+    $('#nps-description').text(String(result['description']));
+    $('#nps-directions').text("Driving Directions: "+ String(result['directionsInfo']))
+    $('#images').empty()
+
+    for (img of result['images']){
+        let image = $("<img id='image' src='"+ String(img['url']) + "'width='500' height='200'><br>")
+          $('#images').append(image);
+
+        let caption = $("<div id='caption'>"+ String(img['caption']) + "</div>")
+          $('#image').append(caption);
+
+    } 
+
+    }
+
+
+    });
+
+  });
