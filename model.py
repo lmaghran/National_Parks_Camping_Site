@@ -41,11 +41,12 @@ class Recreation_area(db.Model):
     def __repr__(self):
         return f"""<Rec_id={self.rec_area_id},Id_name={self.rec_id_name}>"""
 
-def connect_to_db(app):
+
+def connect_to_db(app, db_uri='postgresql:///npcamping'):
     """Connect the database to our Flask app."""
 
     # Configure to use our PostgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///npcamping'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)

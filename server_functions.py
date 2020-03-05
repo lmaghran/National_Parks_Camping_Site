@@ -32,23 +32,6 @@ def random_images(rec_areas):
 
     return random_images[:7]
 
-def get_np_info(selected_area):
-    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
-    nps_api_key= os.environ['NPS_API_KEY']
-    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
-    nps_code= get_nps_code(selected_area)
-    print(nps_code)
-    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
-    response = requests.get(url, headers=headers)
-    json_resp= response.json()
-    np_info=json_resp['data'][0]
-    ##nps_dict['data'][0]['description'] - description of park
-    ##image_list=json_resp['data'][0]['images']
-
-    return np_info
-
-
-
 
 def get_nps_code(selected_area):
 
@@ -57,6 +40,19 @@ def get_nps_code(selected_area):
     nps_code= rec_area.rec_id_name
 
     return nps_code
+
+def get_np_info(selected_area):
+    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
+    nps_api_key= os.environ['NPS_API_KEY']
+    headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
+    nps_code= get_nps_code(selected_area)
+    url = f"https://developer.nps.gov/api/v1/parks?parkCode={nps_code}&fields=images&api_key={nps_api_key}"
+    response = requests.get(url, headers=headers)
+    json_resp= response.json()
+    np_info=json_resp['data'][0]
+
+    return np_info
+
 
 def get_nps_photos(nps_code):
 
@@ -82,10 +78,13 @@ def get_campsites(selected_area):
 
 def get_avail_dictionary(camp_id, start_date, end_date):
     headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" }
+    print(start_date)
+    print(end_date)
     availibility_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
     avail_json_response = requests.get(availibility_url, headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" })
     avail_dict_response= avail_json_response.json() ### this is a dictionary
 
+    print(avail_dict_response)
     return avail_dict_response
 
 
@@ -136,24 +135,6 @@ def return_cg_lat_long():
     jsonify(all_campsite_geodata)
     return
 
-def all_campsites():
-    all_campsite_list=[]
-    all_campsites= Campsite.query.filter(Campsite.facility_id!= None).\
-    order_by(Campsite.campsite_name).all()
-
-    for campsite in all_campsites:
-        all_campsite_geodata={}
-        all_campsite_geodata['campground_name']=campsite.campsite_name
-        all_campsite_geodata['facility_id']= campsite.facility_id
-        all_campsite_geodata['lat']= campsite.campsite_lat
-        all_campsite_geodata['long']= campsite.campsite_long
-        all_campsite_geodata['availibility']= 'unknown'
-        all_campsite_list.append(all_campsite_geodata)
-
-    return all_campsite_list
-
-
-
 def generate_availibility_dictionary():
     ## Returns dictionary for mapping and availibility
     avail_json={}
@@ -173,26 +154,17 @@ def generate_availibility_dictionary():
         all_campsite_geodata['availibility']= 'unknown'
         all_campsite_list.append(all_campsite_geodata)
 
-
     if request.args.get('rec_area') != None:
         selected_area= request.args.get('rec_area')
-        nps_code= get_nps_code(selected_area)
-        image_list= get_nps_photos(nps_code)
-
-
     if request.args.get('start-date') != None:
         start_date=request.args.get('start-date')
-
     if request.args.get('end-date') != None:
         end_date=request.args.get('end-date')
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
         # avail_json['images']= image_list
-
-
     for campsite in selected_campsites:
         np_campground_names.append(campsite.campsite_name)
-
     # renames items based on their availibility
     for campground in all_campsite_list:
         name= campground['campground_name']
@@ -205,7 +177,5 @@ def generate_availibility_dictionary():
         else:
             campground['availibility']= 'Availibility Unknown'
 
-
     avail_json['mapping_list'] = all_campsite_list
-
     return avail_json

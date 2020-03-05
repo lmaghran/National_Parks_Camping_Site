@@ -14,17 +14,6 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
 </style>
 
-<style type="text/css">
- .row { vertical-align: top; height:auto !important; }
- .list {display:none; }
- .show {display: none; }
- .hide:target + .show {display: inline; }
- .hide:target {display: none; }
- .hide:target ~ .list {display:inline; }
- @media print { .hide, .show { display: none; } }
- </style>
-
-
 
 <script
   src="https://code.jquery.com/jquery-3.4.1.js"
@@ -72,10 +61,6 @@
     </form>
 
 
-
-
-
-
     <div id="nps-info">
         <h1 id="nps-name"> {{ np_info['fullName'] }} </h1>
             <h2 id="nps-description"> {{ np_info['description'] }} </h2>
@@ -108,8 +93,6 @@
 
 
     {% endblock %}
-
-<script src="/static/nps_ajax.js"> </script>
 </body>
 
 

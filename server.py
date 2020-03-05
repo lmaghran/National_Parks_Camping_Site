@@ -4,7 +4,7 @@ from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Campsite, Recreation_area
 import random
-from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, all_campsites, generate_availibility_dictionary, get_nps_code, random_images, get_np_info
+from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, generate_availibility_dictionary, get_nps_code, random_images, get_np_info
 
 app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
