@@ -77,12 +77,14 @@ $.get("/api/np_selected", function(data){
 function ajaxandmap(result) {
     ///Adds campgrounds to the dom with links
 
-      let nationalParkname= "<h2 id='replacement'>" + String(result['rec_area']) +"</h2>"
+      let nationalParkname= "<h2 id='replacement'>" + String(result['rec_area'])+ "<br>" + " Check-in : " + String(result['dates'][0]) + "<br>" + " Check-out : " + String(result['dates'][1])+"</h2>"
       $('#replacement').append(nationalParkname);
+
+      console.log(String(result['dates']));
 
       Object.keys(result).forEach(function(item) {
 
-        if (((String(item)) !== 'mapping_list') && ((String(item)) !== 'rec_area')){
+        if (((String(item)) !== 'mapping_list') && ((String(item)) !== 'rec_area') && ((String(item)) !== 'dates')){
 
         let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
         $('#replacement').append(campground);

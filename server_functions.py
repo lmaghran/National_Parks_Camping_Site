@@ -3,14 +3,7 @@ from flask import Flask, jsonify, render_template, request
 import requests
 import os
 import random
-
-
-# def rec_area_list():
-#     print(Recreation_area)
-#     rec_areas=Recreation_area.query.filter(Recreation_area.campsites != None).\
-#             order_by(Recreation_area.rec_name).all()
-
-#     return rec_areas
+from datetime import datetime, date
 
 def rec_area_list():
 
@@ -125,6 +118,11 @@ def return_cg_lat_long():
 
     return all_campsite_geodata
 
+def datetime_formatting(date):
+    date= datetime.strptime(date, '%Y-%m-%d')
+    date=date.strftime("%b %d %Y")
+    return date
+
 
 def generate_availibility_dictionary():
     ## Returns dictionary for mapping and availibility
@@ -154,6 +152,11 @@ def generate_availibility_dictionary():
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
         avail_json['rec_area']= selected_area
+        start_date= datetime_formatting(start_date)
+        end_date= datetime_formatting(end_date)
+
+        avail_json['dates']= (start_date, end_date)
+
     for campsite in selected_campsites:     # renames items based on their availibility
         np_campground_names.append(campsite.campsite_name)
 
@@ -167,8 +170,6 @@ def generate_availibility_dictionary():
                 campground['availibility']= 'Not availible for these dates'
         else:
             campground['availibility']= 'Availibility Unknown'
-
     avail_json['mapping_list'] = all_campsite_list
-
 
     return avail_json
