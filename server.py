@@ -35,8 +35,6 @@ def get_np():
 def get_nps_info():
     selected_area= request.args.get('rec_area')
     np_info= get_np_info(selected_area)
-    ##image_list=json_resp['data'][0]['images']
-
     return jsonify(np_info)
 
 
@@ -48,10 +46,9 @@ def return_np_avail():
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
 
-    app.debug = True
-    connect_to_db(app)
-    # Use the DebugToolbar
-    DebugToolbarExtension(app)
-    app.run(host="0.0.0.0")
+    app.debug = True #pragma: no cover
+    connect_to_db(app) #pragma: no cover
+    DebugToolbarExtension(app) #pragma: no cover
+    app.run(host="0.0.0.0") #pragma: no cover

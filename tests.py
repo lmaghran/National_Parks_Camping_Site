@@ -1,7 +1,7 @@
 import unittest
 from server import app
 from model import Campsite, Recreation_area, connect_to_db, db
-from server_functions import rec_area_list, random_images, get_np_info, get_nps_photos, get_campsites
+from server_functions import rec_area_list, random_images, get_np_info, get_nps_photos, get_campsites, get_avail_dictionary, return_cg_lat_long, generate_availibility_dictionary, generate_campsite_dictionary
 
 
 def example_data():
@@ -47,7 +47,6 @@ def example_data():
         rec_id_name = "CAMO",
         rec_name= "Castle Mountains National Monument",
         rec_area_des= "Castle Mountains represents some of the most unique elements..."
-
         )
 
 
@@ -92,17 +91,38 @@ class CampingTests(unittest.TestCase):
         result = self.client.get("/")
         self.assertNotIn(b"Enter a check-in date:", result.data)
 
+    def test_get_avail_dictionary(self):
+        camp_id= 247591
+        start_date='2020-03-02'
+        end_date='2020-03-03'
+        self.assertTrue(get_avail_dictionary(camp_id, start_date, end_date))
+
     def test_get_campsites(self):
         selected_area= "Yosemite National Park"
         self.assertTrue(get_campsites(selected_area))
+
+    def test_generate_campsite_dictionary(self):
+        selected_campsites= get_campsites("Yosemite National Park")
+        start_date='2020-03-02'
+        end_date='2020-03-03'
+        self.assertTrue(generate_campsite_dictionary(selected_campsites, start_date, end_date))
+
+    def test_return_cg_lat_long(self):
+        self.assertTrue(return_cg_lat_long())
+
+    def test_generate_availibility_dictionary(self):
+        with app.test_request_context():
+            self.assertIn("availibility", generate_availibility_dictionary()['mapping_list'][0].keys())
 
     def test_selected(self):
         result = self.client.get("/np_selected",
                                   query_string= {'rec_area': 'Olympic National Park'},
                                   follow_redirects=True)
 
-        # self.assertIn(b"Olympic National Park", result.data)
-        # self.assertIn(b"From Olympia", result.data)
+    def test_selected(self):
+        result = self.client.get("/np_selected",
+                                  query_string= {'rec_area': 'Olympic National Park'},
+                                  follow_redirects=True)
 
     def tearDown(self):
 
