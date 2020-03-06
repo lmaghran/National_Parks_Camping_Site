@@ -147,16 +147,16 @@ def generate_availibility_dictionary():
 
     if request.args.get('rec_area') != None:
         selected_area= request.args.get('rec_area')
-    if request.args.get('start-date') != None:
+
+    if (request.args.get('end-date') != None) and (request.args.get('start-date') != None):
         start_date=request.args.get('start-date')
-    if request.args.get('end-date') != None:
         end_date=request.args.get('end-date')
         selected_campsites= get_campsites(selected_area)
         avail_json= generate_campsite_dictionary(selected_campsites, start_date, end_date)
-        # avail_json['images']= image_list
-    for campsite in selected_campsites:
+        avail_json['rec_area']= selected_area
+    for campsite in selected_campsites:     # renames items based on their availibility
         np_campground_names.append(campsite.campsite_name)
-    # renames items based on their availibility
+
     for campground in all_campsite_list:
         name= campground['campground_name']
 
@@ -169,4 +169,6 @@ def generate_availibility_dictionary():
             campground['availibility']= 'Availibility Unknown'
 
     avail_json['mapping_list'] = all_campsite_list
+
+
     return avail_json

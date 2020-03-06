@@ -57,7 +57,7 @@ $.get("/api/np_selected", function(data){
       var fill= "#79c1f1";
       }
 
-      console.log(campground.campground_name);
+      // console.log(campground.campground_name);
 
     let icon= {path: google.maps.SymbolPath.CIRCLE, scale: 8.5, fillColor: fill,
     fillOpacity: 0.4, strokeWeight: 0.4}
@@ -76,24 +76,31 @@ $.get("/api/np_selected", function(data){
 //Function for dom manipulation and addinng points to the map
 function ajaxandmap(result) {
     ///Adds campgrounds to the dom with links
+
+      let nationalParkname= "<h2 id='replacement'>" + String(result['rec_area']) +"</h2>"
+      $('#replacement').append(nationalParkname);
+
       Object.keys(result).forEach(function(item) {
-        
-        if ((String(item)) !== 'mapping_list'){
+
+        if (((String(item)) !== 'mapping_list') && ((String(item)) !== 'rec_area')){
 
         let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
         $('#replacement').append(campground);
 
         if (result[item]['availibility_data']!= null){ 
 
-          for (campsite of result[item]['availibility_data']){
+          let availCampsite = $('<h3>' + "This campground is availible for these dates, click to book." +'</h3>')
+          $('#replacement').append(availCampsite);
+
+        //   // for (campsite of result[item]['availibility_data']){
         
-          let campList = $("<li><h5 id='campsite-list'><a href='https://www.recreation.gov/camping/campsites/" + String(campsite['campsite_id']) + "'>" + String(campsite["site"]) +"(availible site)" +'</a></li>')
-            $('#replacement').append(campList);
-          }
+        //   // let campList = $("<li><h5 id='campsite-list'><a href='https://www.recreation.gov/camping/campsites/" + String(campsite['campsite_id']) + "'>" + String(campsite["site"]) +"(availible site)" +'</a></li>')
+        //   //   $('#replacement').append(campList);
+        //   // }
         }
 
         else {
-          let emptyCampsite = $('<li><h5>' + "No campsites available for these dates at this campground" +'</li>')
+          let emptyCampsite = $('<h5>' + "No campsites available for these dates at this campground" +'</h5')
           $('#replacement').append(emptyCampsite);
         }
 
@@ -170,9 +177,9 @@ $('#np-info').on('click',  (evt) => {
     "rec_area": selectedNp
     },
     success: (result) => {
-      console.log(result);
+      // console.log(result);
 
-      console.log(result['latLong'])
+      // console.log(result['latLong'])
       map.setCenter({lat:Number(result['latitude']), lng: Number(result['longitude'])});
       map.setZoom(8)
 
@@ -192,10 +199,6 @@ $('#np-info').on('click',  (evt) => {
           $('#image').append(caption);
 
     } 
-
     }
-
-
     });
-
   });
