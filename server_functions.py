@@ -165,9 +165,9 @@ def generate_availibility_dictionary():
 
         if name in np_campground_names:
             if avail_json[name].get('availibility_data') != None:
-                campground["availibility"]= 'Availible for these dates'
+                campground["availibility"]= f"Availible from {start_date} through {end_date}"
             else:
-                campground['availibility']= 'Not availible for these dates'
+                campground['availibility']= f"Not availible from {start_date} through {end_date}"
         else:
             campground['availibility']= 'Availibility Unknown'
     avail_json['mapping_list'] = all_campsite_list
