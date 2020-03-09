@@ -1,63 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head>
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tentative- find campsites in National Parks</title>
 
-    <title></title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 
+  <script
+  src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
 
-<style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" 
+        integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+  <link href="../static/style.css" rel="stylesheet">
+  <style>
     #map
     {
     height:400px;
     width:100%;
     }
 
-    #legend {
-        font-family: Arial, sans-serif;
-        background: #fff;
-        padding: 10px;
-        margin: 10px;
-        border: 3px solid #000;
-      }
-      #legend h3 {
-        margin-top: 0;
-      }
-      #legend img {
-        vertical-align: middle;
-      }
+  </style>
 
-    <link rel="stylesheet" href="https://js.arcgis.com/4.14/esri/themes/light/main.css">
-</style>
-
-
-<script
-  src="https://code.jquery.com/jquery-3.4.1.js"
-  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-  crossorigin="anonymous"></script>
-
-    {% block content %}
-    <title></title>
+{% block content %}
 </head>
+
+
 <body>
-    <h1>Tentative!  Find campsites in National Parks!<h1>
-    <h2>Please select a national park below:<h2>
+<!-- Navigation -->
+<nav class= "navbar navbar-expand-md navbar-light bg-light sticky-top">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="../static/img/Artboard 1@0.5x.png" height="65px" alt = "Tentative logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" 
+        data-target="#navbarResponsive">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      
+<!--  National park form inside of nav bar -->
+<div class="container">
+  <div class="row">
+    <div class="form-group">
+        <form id="np-info" form action="/api/np">
+          <label for="exampleFormControlSelect1">Select a National Park</label>
+              <select id = "npList" name="rec_area">
+              {% for rec_area in rec_areas %}
+              <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
+              {% endfor %}
+              </select>
+      </form>
 
-    <form id="np-info" form action="/api/np">
-       <fieldset>
-          <legend>Select a National Park</legend>
-          <p>
-             <label>National Park List</label>
-            <select id = "npList" name="rec_area">
-                    {% for rec_area in rec_areas %}
-                            <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
-                    {% endfor %}
-            </select>
-          </p>
-       </fieldset>
-    </form>
-    <form id="select-np" form action="/api/np_selected">
-
-
+<form id="select-np" form action="/api/np_selected">
        <fieldset>
             <label>
         Enter a check-in date:
@@ -70,10 +71,20 @@
     <!-- <input type="date" id="End Date" name="end-date"> -->
     <input type="date" id="end-date" name="end-date">
     </label><br><br><br>
-            <input type="submit">
+      <button class="btn btn-primary" type="submit">See Availability</button>
           </p>
        </fieldset>
     </form>
+
+
+    </div>
+  </div>
+</div>
+<!-- Closing the nav bar -->
+</ul>
+</div>
+</div>
+</nav>
 
 
     <div id="nps-info">

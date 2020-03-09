@@ -33,40 +33,28 @@
       </button>
   <div class="collapse navbar-collapse" id="navbarResponsive">
     <ul class="navbar-nav ml-auto">
-      <li class="nav-items">
-        <a class="nav-link" href="#">Home</a>
-      </li>
-      <li class="nav-items">
-        <a class="nav-link" href="#">About</a>
-      </li>
-    </ul>
-  </div>
-  </div>
-</nav>
-
+      
+<!--  National park form inside of nav bar -->
 <div class="container">
   <div class="row">
-    <form id="select-np" form action="/np_selected">
-        <!-- Example single danger button -->
-          <div class="btn-group" id = "npList" name="rec_area">
-            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-             Select a National Park to Start
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#">Select a National Park</a>
+    <div class="form-group">
+      <form id="select-np" form action="/np_selected">
+          <label for="exampleFormControlSelect1">Select a National Park to Begin</label>
+              <select id = "npList" name="rec_area">
               {% for rec_area in rec_areas %}
-              <a class="dropdown-item" href="#">{{ rec_area.rec_name }}</a>
+              <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
               {% endfor %}
-              <button type="button" data-toggle="modal" data-target="#myModal">Launch modal</button>
-            </div>
-          </div>
-        </select>
-        <input type="submit">
-      </p>
-    </form>
+              </select>
+            <button class="btn btn-primary" type="submit">Select National Park</button>
+      </form>
+    </div>
   </div>
 </div>
-
+<!-- Closing the nav bar -->
+</ul>
+</div>
+</div>
+</nav>
 
 
 <div class="container-fluid no-padding">
@@ -83,7 +71,7 @@
     <div class="carousel-inner">
         {% for image in random_images %}
         <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="slide{{ loop.index }}">
-            <img src="{{ image['url'] }}" width="2000px" height="1000px">
+            <img src="{{ image['url'] }}" width=100% height=40%>
             <div class="carousel-caption d-none d-md-block">
                 <h5>{{ image['caption'] }}</h5>
             </div>
@@ -98,24 +86,6 @@
     <span class="sr-only">Next</span>
   </a>
 </div>
-
-
-
-
-
-<!--- Image Slider -->
-
-
-
-
-
-<!--     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> -->
-
-<!--     <div class="carousel-item">
-      <img class="d-block w-100" src="..." alt="Third slide">
-    </div> -->
-<!--   </div> -->
-
 
 
 {% endblock %}
