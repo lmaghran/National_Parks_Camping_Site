@@ -26,7 +26,7 @@
 <!-- Navigation -->
 <nav class= "navbar navbar-expand-md navbar-light bg-light sticky-top">
   <div class="container-fluid">
-      <a class="navbar-brand" href="#"><img src="../static/img/Artboard 1@0.5x.png" alt = "Tentative logo"></a>
+      <a class="navbar-brand" href="#"><img src="../static/img/Artboard 1@0.5x.png" height="65px" alt = "Tentative logo"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" 
         data-target="#navbarResponsive">
         <span class="navbar-toggler-icon"></span>
@@ -42,18 +42,24 @@
     </ul>
   </div>
   </div>
-  </nav>
+</nav>
 
 <div class="container">
   <div class="row">
     <form id="select-np" form action="/np_selected">
-        <legend>Select a National Park</legend>
-        <p>
-        <label>National Park List</label>
-        <select id = "npList" name="rec_area">
-        {% for rec_area in rec_areas %}
-        <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
-        {% endfor %}
+        <!-- Example single danger button -->
+          <div class="btn-group" id = "npList" name="rec_area">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+             Select a National Park to Start
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Select a National Park</a>
+              {% for rec_area in rec_areas %}
+              <a class="dropdown-item" href="#">{{ rec_area.rec_name }}</a>
+              {% endfor %}
+              <button type="button" data-toggle="modal" data-target="#myModal">Launch modal</button>
+            </div>
+          </div>
         </select>
         <input type="submit">
       </p>
@@ -61,27 +67,38 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="row justify-content-md-center">
-    <div class="col">
-      {% for image in random_images %}
-
-      <div class="card" style="width: 50rem;">
-        <img src="{{ image['url'] }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-      </div>
 
 
-          {% endfor %}
+<div class="container-fluid no-padding">
+  <div class="row">
+    <div class="col-md-12">
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          {% for image in random_images %}
+      <li data-target="#carouselExampleIndicators" data-slide-to="{{ loop.index }}" class="active"></li>
+    </li>
+    {% endfor %}
+  </ol>
 
-
+    <div class="carousel-inner">
+        {% for image in random_images %}
+        <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="slide{{ loop.index }}">
+            <img src="{{ image['url'] }}" width="2000px" height="1000px">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ image['caption'] }}</h5>
+            </div>
+            </div>
+            {% endfor %}
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
 </div>
-</div>
 
-</div>
-</div>
 
 
 
