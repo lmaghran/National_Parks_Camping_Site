@@ -1,21 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<script
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tentative- find campsites in National Parks</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script
   src="https://code.jquery.com/jquery-3.4.1.js"
   integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
   crossorigin="anonymous"></script>
 
-
-    {% block content %}
-    <title></title>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" 
+        integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/styles.css">
+  <link href="../static/style.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Tentative!  Find campsites in National Parks!<h1>
-    <h2>Please select a national park below:<h2>
 
-<form id="select-np" form action="/np_selected">
-    <fieldset>
+    {% block content %}
+
+<!-- Navigation -->
+<nav class= "navbar navbar-expand-md navbar-light bg-light sticky-top">
+  <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="../static/img/Artboard 1@0.5x.png" alt = "Tentative logo"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" 
+        data-target="#navbarResponsive">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-items">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-items">
+        <a class="nav-link" href="#">About</a>
+      </li>
+    </ul>
+  </div>
+  </div>
+  </nav>
+
+<div class="container">
+  <div class="row">
+    <form id="select-np" form action="/np_selected">
         <legend>Select a National Park</legend>
         <p>
         <label>National Park List</label>
@@ -26,17 +57,48 @@
         </select>
         <input type="submit">
       </p>
-    </fieldset>
+    </form>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col">
+      {% for image in random_images %}
+
+      <div class="card" style="width: 50rem;">
+        <img src="{{ image['url'] }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+      </div>
 
 
-{% for image in random_images %}
-
-<img class="rand_picture"
-     src="{{ image['url'] }}"
-     alt="">
+          {% endfor %}
 
 
-{% endfor %}
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+
+<!--- Image Slider -->
+
+
+
+
+
+<!--     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li> -->
+
+<!--     <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Third slide">
+    </div> -->
+<!--   </div> -->
+
 
 
 {% endblock %}
