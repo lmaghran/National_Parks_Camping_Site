@@ -71,8 +71,9 @@ def get_campsites(selected_area):
 
 def get_avail_dictionary(camp_id, start_date, end_date):
     headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" }
-    availibility_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
-    avail_json_response = requests.get(availibility_url, headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" })
+    availability_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
+    print(availability_url)
+    avail_json_response = requests.get(availability_url, headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" })
     avail_dict_response= avail_json_response.json() ### this is a dictionary
 
     return avail_dict_response
@@ -81,7 +82,7 @@ def get_avail_dictionary(camp_id, start_date, end_date):
 
 def generate_campsite_dictionary(selected_campsites, start_date, end_date):
     campsite_dictionary={}
-    availible_campsite_list=[]
+    available_campsite_list=[]
 
     for campsite in selected_campsites: # circling through list of campsites in a National Park
         camp_id= campsite.facility_id
@@ -96,9 +97,9 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
                 if avail_dict['campsites'][site]['availabilities'][availability]=="Available":
                     i+=1
             if i==dates_stayed:
-                availible_campsite_list.append(avail_dict['campsites'][site])
-    if len(availible_campsite_list)!=0:
-        campsite_dictionary[campsite.campsite_name]["availibility_data"]=availible_campsite_list
+                available_campsite_list.append(avail_dict['campsites'][site])
+    if len(available_campsite_list)!=0:
+        campsite_dictionary[campsite.campsite_name]["availability_data"]=available_campsite_list
     avail_json= campsite_dictionary
     return avail_json
 
@@ -113,7 +114,7 @@ def return_cg_lat_long():
         all_campsite_geodata[campsite.campsite_name]['facility_id']= campsite.facility_id
         all_campsite_geodata[campsite.campsite_name]['campsite_lat']= campsite.campsite_lat
         all_campsite_geodata[campsite.campsite_name]['campsite_long']= campsite.campsite_long
-        all_campsite_geodata[campsite.campsite_name]['availibility']= 'unknown'
+        all_campsite_geodata[campsite.campsite_name]['availability']= 'unknown'
 
 
     return all_campsite_geodata
@@ -124,10 +125,10 @@ def datetime_formatting(date):
     return date
 
 
-def generate_availibility_dictionary():
-    ## Returns dictionary for mapping and availibility
+def generate_availability_dictionary():
+    ## Returns dictionary for mapping and availability
     avail_json={}
-    availible_campsite_list=[]
+    available_campsite_list=[]
     selected_campsites= []
     np_campground_names=[]
 
@@ -140,7 +141,7 @@ def generate_availibility_dictionary():
         all_campsite_geodata['facility_id']= campsite.facility_id
         all_campsite_geodata['lat']= campsite.campsite_lat
         all_campsite_geodata['long']= campsite.campsite_long
-        all_campsite_geodata['availibility']= 'unknown'
+        all_campsite_geodata['availability']= 'unknown'
         all_campsite_list.append(all_campsite_geodata)
 
     if request.args.get('rec_area') != None:
@@ -154,22 +155,21 @@ def generate_availibility_dictionary():
         avail_json['rec_area']= selected_area
         start_date= datetime_formatting(start_date)
         end_date= datetime_formatting(end_date)
-
         avail_json['dates']= (start_date, end_date)
 
-    for campsite in selected_campsites:     # renames items based on their availibility
+    for campsite in selected_campsites:     # renames items based on their availability
         np_campground_names.append(campsite.campsite_name)
 
     for campground in all_campsite_list:
         name= campground['campground_name']
 
         if name in np_campground_names:
-            if avail_json[name].get('availibility_data') != None:
-                campground["availibility"]= f"Availible from {start_date} through {end_date}"
+            if avail_json[name].get('availability_data') != None:
+                campground["availability"]= f"Available from {start_date} through {end_date}"
             else:
-                campground['availibility']= f"Not availible from {start_date} through {end_date}"
+                campground['availability']= f"Not available from {start_date} through {end_date}"
         else:
-            campground['availibility']= 'Availibility Unknown'
+            campground['availability']= 'Availability Unknown'
     avail_json['mapping_list'] = all_campsite_list
 
     return avail_json

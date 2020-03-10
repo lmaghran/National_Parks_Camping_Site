@@ -4,7 +4,7 @@ from flask import Flask, jsonify, render_template, request
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, Campsite, Recreation_area
 import random
-from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, generate_availibility_dictionary, get_nps_code, random_images, get_np_info
+from server_functions import rec_area_list, get_campsites, get_avail_dictionary, generate_campsite_dictionary, generate_availability_dictionary, get_nps_code, random_images, get_np_info
 
 app = Flask(__name__)
 app.jinja_env.undefined = StrictUndefined
@@ -40,8 +40,8 @@ def get_nps_info():
 
 @app.route('/api/np_selected')
 def return_np_avail():
-#    """returns the availibility for campsites in campgrounds in a national park"""
-    avail_json= generate_availibility_dictionary()
+#    """returns the availability for campsites in campgrounds in a national park"""
+    avail_json= generate_availability_dictionary()
     return jsonify(avail_json)
 
 

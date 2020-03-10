@@ -46,17 +46,17 @@ function initMap(){
 //API call to add the initial markers to the map
 $.get("/api/np_selected", function(data){
     for (campground of data.mapping_list){
-      if (campground.availibility.startsWith('Availible')){
+      if (campground.availability.startsWith('Available')){
         var fill = "#0F9D58";
         var type = "Available"
       }
 
-      else if (campground.availibility.startsWith("Not")){
+      else if (campground.availability.startsWith("Not")){
       var fill = "#DB4437";
       var type = "Not available";
       }
 
-      else if (campground.availibility === 'Availibility Unknown'){
+      else if (campground.availability === 'Availability Unknown'){
       var fill = "#79c1f1";
       var type = 'Availability Unknown';
       }
@@ -67,7 +67,7 @@ $.get("/api/np_selected", function(data){
     fillOpacity: 0.4, strokeWeight: 0.4}
 
     marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
-            content: campground.campground_name, available: campground.availibility,
+            content: campground.campground_name, available: campground.availability,
             fac_id:campground.facility_id,
            icon: icon, map:map, type: type});
 
@@ -96,19 +96,19 @@ function ajaxandmap(result) {
 
         if (((String(item)) !== 'mapping_list') && ((String(item)) !== 'rec_area') && ((String(item)) !== 'dates')){
 
-        if (result[item]['availibility_data']!= null){
+        if (result[item]['availability_data']!= null){
 
-          let campground = $("<p id='replacement'><strong><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></strong></p>')
+          let campground = $("<p id='replacement'><strong><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +" target='_blank'>"+ String(item) +'</a></strong></p>')
           $('#replacement').append(campground);
 
-          // console.log(result[item]['availibility_data']);
+          // console.log(result[item]['availability_data']);
 
-          let availCampsite = $('<p> There are ' + String(result[item]['availibility_data'].length)  +" sites available at this campground, click to book. </p>" +"<hl>")
+          let availCampsite = $('<p> There are ' + String(result[item]['availability_data'].length)  +" sites available at this campground, click to book. </p>" +"<hl>")
           $('#replacement').append(availCampsite);
 
-        //   // for (campsite of result[item]['availibility_data']){
+        //   // for (campsite of result[item]['availability_data']){
         
-        //   // let campList = $("<li><h5 id='campsite-list'><a href='https://www.recreation.gov/camping/campsites/" + String(campsite['campsite_id']) + "'>" + String(campsite["site"]) +"(availible site)" +'</a></li>')
+        //   // let campList = $("<li><h5 id='campsite-list'><a href='https://www.recreation.gov/camping/campsites/" + String(campsite['campsite_id']) + "'>" + String(campsite["site"]) +"(available site)" +'</a></li>')
         //   //   $('#replacement').append(campList);
         //   // }
         }
@@ -131,20 +131,20 @@ function ajaxandmap(result) {
     marker.setMap(null)
     };
 
-  //adds different colors to the map based on availibility
+  //adds different colors to the map based on availability
   for (campground of result.mapping_list){
-      if (campground.availibility.startsWith('Availible')){
+      if (campground.availability.startsWith('Available')){
       var fill = "#0F9D58";
       var fillOpacity= 1;
       map.setCenter({lat:campground.lat, lng:campground.long});
 
       }
-      else if (campground.availibility.startsWith("Not")){
+      else if (campground.availability.startsWith("Not")){
       var fill = "#DB4437";
       var fillOpacity= 1;
       map.setCenter({lat:campground.lat, lng:campground.long});
       }
-      else if (campground.availibility === 'Availibility Unknown'){
+      else if (campground.availability === 'Availability Unknown'){
       var fill= "#79c1f1";
       var fillOpacity= .4;
       }
@@ -155,7 +155,7 @@ function ajaxandmap(result) {
       var marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
                               content: campground.campground_name, 
                               fac_id: campground.facility_id,
-                              available: campground.availibility,
+                              available: campground.availability,
                               icon: icon, map:map});
     }
       map.setZoom(8)
