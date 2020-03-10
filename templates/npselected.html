@@ -108,30 +108,31 @@
         <div class="row">
           <div class="col-md-12">
               <div class="card-body">
-      <div id="images" class="images">
-      {% for image in np_info['images'] %}
-      <img class="image"
-      src="{{ image['url'] }}"
-      alt="{{ image['altText'] }}" height="100px">
-      {% endfor %}
+                <div id="images" class="images">
+                <img class="image"
+                  src="{{ np_info['images'][0]['url'] }}"
+                  alt="{{ np_info['images'][0]['altText'] }}" width=525px>
+                <p> {{ np_info['images'][0]['caption'] }} </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div id="map"></div>
+    </div>
+        <div class="col-2">
+          <div id=replacement>
+            <h5><strong>Campground List</strong></h5>
+            <h5> Select a National Park and Dates for Availablity Info </h5>
+        </div>
       </div>
     </div>
   </div>
 </div>
-</div>
-</div>
 
-  </div>
-    <div class="col-6">
-      <div id="map"></div>
-    </div>
-
-        <div class="col-2">
-            <h5><strong>Campground List</strong></h5>
-          <ul id="replacement"> Select a National Park and Dates for Availablity Info </ul>
-        </div>
-  </div>
-</div>
 
 <script src="/static/ajax.js"> </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGZpwieWbX6h5gSpxmyfMZ-HYZD_v8E6U&callback=initMap">
