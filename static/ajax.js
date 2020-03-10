@@ -15,7 +15,7 @@ function addMarker(params){
       '<div id="content">'+
       '<div id="siteNotice">'+
       params.content+'<br>'+
-      params.availible+ "<br>"+
+      params.available+ "<br>"+
       '<a href=https://www.recreation.gov/camping/campgrounds/'+
       params.fac_id +" target='_blank'>"+
       "Go to reservation website"+
@@ -29,19 +29,6 @@ function addMarker(params){
   marker.addListener('click', function(){
     infoWindow.open(map, marker)
   });
-
-
-  var legend = document.getElementById('legend');
-    // for (var key in icons) {
-      // var type = icons[key];
-      // var name = type.name;
-      // var icon = type.icon;
-      var div = document.createElement('div');
-      div.innerHTML = '<img src="' + 'https://maps.google.com/mapfiles/kml/shapes/parking_lot_maps.png' + '"> ';
-      legend.appendChild(div);
-    
-
-        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
 
   return marker
 }
@@ -84,7 +71,8 @@ $.get("/api/np_selected", function(data){
     fillOpacity: 0.4, strokeWeight: 0.4}
 
     marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
-            content: campground.campground_name, fac_id:campground.facility_id,
+            content: campground.campground_name, available: campground.availibility,
+            fac_id:campground.facility_id,
            icon: icon, map:map, type: type});
 
     markers.push(marker)
@@ -98,10 +86,12 @@ $.get("/api/np_selected", function(data){
 function ajaxandmap(result) {
     ///Adds campgrounds to the dom with links
 
-      let nationalParkname= "<h2 id='replacement'>" + String(result['rec_area'])+ "</h2>"
+      $('#replacement').empty()
+
+      let nationalParkname= "<h5 id='replacement'><strong>" + String(result['rec_area'])+ "</strong></h5>"
       $('#replacement').append(nationalParkname);
 
-      let datesStayed= "<h3> Check-in : " + String(result['dates'][0]) + "<br>" + " Check-out : " + String(result['dates'][1])+"</h3>"
+      let datesStayed= "<h5> Check-in : " + String(result['dates'][0]) + "<br>" + " Check-out : " + String(result['dates'][1])+"</h5>"
       $('#replacement').append(datesStayed);
 
       console.log(String(result['dates']));
@@ -110,12 +100,14 @@ function ajaxandmap(result) {
 
         if (((String(item)) !== 'mapping_list') && ((String(item)) !== 'rec_area') && ((String(item)) !== 'dates')){
 
-        let campground = $("<li><h2 id='replacement'><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></li>')
-        $('#replacement').append(campground);
+        if (result[item]['availibility_data']!= null){
 
-        if (result[item]['availibility_data']!= null){ 
+          let campground = $("<li><p id='replacement'><strong><a href=https://www.recreation.gov/camping/campgrounds/"+ String(result[item]['campground_id']) +">"+ String(item) +'</a></strong></p></li>')
+          $('#replacement').append(campground);
 
-          let availCampsite = $('<h3>' + "This campground is available for these dates, click to book." +'</h3>')
+          // console.log(result[item]['availibility_data']);
+
+          let availCampsite = $('<p> There are ' + String(result[item]['availibility_data'].length)  +" sites available at this campground, click to book. </p>")
           $('#replacement').append(availCampsite);
 
         //   // for (campsite of result[item]['availibility_data']){
@@ -126,7 +118,11 @@ function ajaxandmap(result) {
         }
 
         else {
-          let emptyCampsite = $('<h5>' + "No campsites available for these dates at this campground" +'</h5')
+
+          let campground = $("<li><p id='replacement'><strong>" + String(item) +'</strong></p></li>')
+          $('#replacement').append(campground);
+
+          let emptyCampsite = $('<p>' + "No campsites available for these dates at this campground" +'</p>')
           $('#replacement').append(emptyCampsite);
         }
 
@@ -163,8 +159,7 @@ function ajaxandmap(result) {
       var marker = addMarker({coords:{lat:campground.lat, lng:campground.long},
                               content: campground.campground_name, 
                               fac_id: campground.facility_id,
-                              availible: campground.availibility,
-
+                              available: campground.availibility,
                               icon: icon, map:map});
     }
       map.setZoom(8)
@@ -222,14 +217,9 @@ $('#np-info').on('click',  (evt) => {
     $('#nps-description').text(String(result['description']));
     $('#nps-directions').text("Driving Directions: "+ String(result['directionsInfo']))
     $('#images').empty()
-
     for (img of result['images']){
-        let image = $("<img id='image' src='"+ String(img['url']) + "'width='500' height='200'><br>")
+        let image = $("<img class='image' src='"+ String(img['url']) + "' height='100px'><br>")
           $('#images').append(image);
-
-        let caption = $("<div id='caption'>"+ String(img['caption']) + "</div>")
-          $('#image').append(caption);
-
     } 
     }
     });

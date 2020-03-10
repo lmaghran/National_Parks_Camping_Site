@@ -46,72 +46,94 @@
     <ul class="navbar-nav ml-auto">
       
 <!--  National park form inside of nav bar -->
-<div class="container">
-  <div class="row">
-    <div class="form-group">
-        <form id="np-info" form action="/api/np">
-          <label for="exampleFormControlSelect1">Select a National Park</label>
-              <select id = "npList" name="rec_area">
-              {% for rec_area in rec_areas %}
-              <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
-              {% endfor %}
-              </select>
-      </form>
-
-<form id="select-np" form action="/api/np_selected">
-       <fieldset>
-            <label>
-        Enter a check-in date:
-    <!-- <input type="date" id="Start Date" name="start-date"> -->
-    <input type="date" id="start-date" name="start-date">
-    </label><br>
-
+<li class="nav-items">
+  <div class="nav-link" class="form-group">
+    <form id="np-info" form action="/api/np">
+      <label for="exampleFormControlSelect1">Select a National Park</label>
+        <select id = "npList" name="rec_area">
+          {% for rec_area in rec_areas %}
+          <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
+          {% endfor %}
+        </select>
+    </form>
+  </li>
+<div class="nav-items">
+  <div class="nav-link">
+    <form id="select-np" form action="/api/np_selected">
+      <label> Enter a check-in date:
+      <input type="date" id="start-date" name="start-date">
+    </label>
+  </div>
+</div>
+<div class="nav-items">
+  <div class="nav-link">
     <label>
         Enter a check-out date:
-    <!-- <input type="date" id="End Date" name="end-date"> -->
-    <input type="date" id="end-date" name="end-date">
-    </label><br><br><br>
-      <button class="btn btn-primary" type="submit">See Availability</button>
+              <input type="date" id="end-date" name="end-date">
+            </label>
+          <button class="btn btn-primary" type="submit">See Availability</button>
           </p>
        </fieldset>
     </form>
-
-
     </div>
   </div>
 </div>
-<!-- Closing the nav bar -->
 </ul>
 </div>
 </div>
 </nav>
 
-
-    <div id="nps-info">
-        <h1 id="nps-name"> {{ np_info['fullName'] }} </h1>
-            <h2 id="nps-description"> {{ np_info['description'] }} </h2>
-            <h2 id= "nps-directions"> Driving Directions: {{ np_info['directionsInfo'] }} </h2>
-
-        <div id="images">
-
-        {% for image in np_info['images'] %}
-                <img class="image"
-                src="{{ image['url'] }}"
-                alt="{{ image['altText'] }}">
-                <h3> {{ image['caption']}} </h3><br>
-
-        {% endfor %}
+<!-- Site Body -->
+<div class="container-fluid">
+  <div class="row">
+  <div class="col">
+<!--       Left side of page- NPS Card -->
+    <div class="card">
+  <!-- Photos -->
+      <div class="container-fluid no-padding">
+        <div class="row">
+          <div class="col-md-12">
+              <div class="card-body">
+                <h5 class="card-title" id="nps-name">{{ np_info['fullName'] }}</h5>
+                  <p class="card-text"id="nps-description"> {{ np_info['description'] }} </p>
+                   <p class="card-text" id= "nps-directions"> Driving Directions: {{ np_info['directionsInfo'] }} </p>
+              </div>
+            </div>
+          </div>
         </div>
     </div>
+<div class="card">
+  <!-- Photos -->
+      <div class="container-fluid no-padding">
+        <div class="row">
+          <div class="col-md-12">
+              <div class="card-body">
+      <div id="images" class="images">
+      {% for image in np_info['images'] %}
+      <img class="image"
+      src="{{ image['url'] }}"
+      alt="{{ image['altText'] }}" height="100px">
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
 
-<h1 id="mapdiv"> NP Map </h1>
-<div id="map"></div>
-<div id="legend"><h3>Legend</h3></div>
+  </div>
+    <div class="col-6">
+      <h5 id="mapdiv"> NP Map </h5>
+      <div id="map"></div>
+      <div id="legend"><h3></h3></div>
+    </div>
 
-<h2>Campground List</h2>
-<ul id="replacement"> </ul>
-
-
+        <div class="col-2">
+            <h5><strong>Campground List</strong></h5>
+          <ul id="replacement"> Select a National Park and Dates for Availablity Info </ul>
+        </div>
+  </div>
+</div>
 
 <script src="/static/ajax.js"> </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDGZpwieWbX6h5gSpxmyfMZ-HYZD_v8E6U&callback=initMap">
