@@ -71,9 +71,9 @@
     <div class="carousel-inner">
         {% for image in random_images %}
         <div class="carousel-item {% if loop.index == 1 %}active{% endif %}" id="slide{{ loop.index }}">
-            <img src="{{ image['url'] }}" width=100% height=40%>
+            <img src="{{ image['url'] }}" width=100% height=700px>
             <div class="carousel-caption d-none d-md-block">
-                <h5>{{ image['caption'] }}</h5>
+                <h2>{{ image['caption'] }}</h2>
             </div>
             </div>
             {% endfor %}

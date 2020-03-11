@@ -17,7 +17,7 @@ def ran_np_photos():
     rec_areas=rec_area_list()
     random_img_lst= random_images(rec_areas)
     
-    return render_template("index2.html", rec_areas=rec_areas, random_images= random_img_lst)
+    return render_template("index.html", rec_areas=rec_areas, random_images= random_img_lst)
 
 
 
