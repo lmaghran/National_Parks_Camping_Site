@@ -3,7 +3,7 @@ import json
 from model import Campsite, Recreation_area, connect_to_db, db
 from server import app
 
-#####Need Set Removal {'2573', '2621', '2609', '2554', '2617', '2616', '2586', '2576', '2602', '2589'}
+# Remove= {'2573', '2621', '2609', '2554', '2617', '2616', '2586', '2576', '2602', '2589'}
 
 def load_campsites(campsite_filename):
     """Load campsite info into database."""
@@ -25,26 +25,26 @@ def load_campsites(campsite_filename):
 
     for i, camp_dict in enumerate(camp_file):
         if camp_dict["ParentRecAreaID"] in np_id_list:
-            facility_id= int(camp_dict["FacilityID"])
-            parent_rec_area_id= int(camp_dict["ParentRecAreaID"])
-            campsite_name= camp_dict["FacilityName"]
-            campsite_lat= float(camp_dict["FacilityLatitude"])
-            campsite_long= float(camp_dict["FacilityLongitude"])
-            campsite_json_latlong = str(camp_dict["GEOJSON"])
-            is_reservable = bool(camp_dict["Reservable"])
-            campsite_type = camp_dict["FacilityTypeDescription"]
-            campsite_description= camp_dict["FacilityDescription"]
+                facility_id= int(camp_dict["FacilityID"])
+                parent_rec_area_id= int(camp_dict["ParentRecAreaID"])
+                campsite_name= camp_dict["FacilityName"]
+                campsite_lat= float(camp_dict["FacilityLatitude"])
+                campsite_long= float(camp_dict["FacilityLongitude"])
+                campsite_json_latlong = str(camp_dict["GEOJSON"])
+                is_reservable = bool(camp_dict["Reservable"])
+                campsite_type = camp_dict["FacilityTypeDescription"]
+                campsite_description= camp_dict["FacilityDescription"]
 
-            campsite= Campsite(
-                        facility_id= facility_id,
-                        parent_rec_area_id= parent_rec_area_id,
-                        campsite_name= campsite_name,
-                        campsite_lat= campsite_lat,
-                        campsite_long= campsite_long,
-                        campsite_json_latlong = campsite_json_latlong,
-                        is_reservable = is_reservable,
-                        campsite_type = campsite_type,
-                        campsite_description= campsite_description)
+                campsite= Campsite(
+                            facility_id= facility_id,
+                            parent_rec_area_id= parent_rec_area_id,
+                            campsite_name= campsite_name,
+                            campsite_lat= campsite_lat,
+                            campsite_long= campsite_long,
+                            campsite_json_latlong = campsite_json_latlong,
+                            is_reservable = is_reservable,
+                            campsite_type = campsite_type,
+                            campsite_description= campsite_description)
 
 
             db.session.add(campsite)
