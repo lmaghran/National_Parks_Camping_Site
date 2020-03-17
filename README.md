@@ -13,13 +13,13 @@
 ##Table of Contents
 
 - [Overview](#Overview)
-- [Technologies and Stack](#technologies)
-- [Contributing](#features)
+- [Technologies and Stack](#Technologies)
+- [Features](#Features)
 
 
 ---
 
-##Overview
+#Overview
 ==========
 **The Map**  
 * Shows all campgrounds in the database (from the recreation.gov api).
@@ -31,7 +31,8 @@
 * See a list of availibile campgrounds based on date criteria and the name of the National Park. 
 * Click on an available campsite to book in recreation.gov.
 
-##Technologies and stack
+#Technologies and stack
+=============
 **Backend:**  
 SQL, Python, Flask, Flask-SQLAlchemy, Jinja2
 
@@ -43,6 +44,7 @@ Recreation.gov API, Recreation.gov availability API, Google Maps for JavaScript,
 
 
 ##Features
+==========
 **Find a Campground**  
  Get all of the campgrounds in a National Park from a SQL query. Choose dates to show availability of these campgrounds and zoom in on a map of their location with an AJAX request. Flask app routes AJAX requests to the database and Flask session. 
  
