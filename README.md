@@ -2,7 +2,7 @@
 
 ![Find a campground](static/img/tentative.gif)
 
-# Tentative
+#Tentative
 
 > Tentative is a full stack web application that allows would-be campsers to easily view availibility for campground in National Parks.  This site shows availibility and a map of National Parks Campgrounds, and allows a user to link to an available campsite on Recreation.gov.
 
@@ -10,9 +10,9 @@
 > Camping, Recreation.gov, National Park Service, NPS, Camping availibility, campground
 
 
-## Table of Contents
+##Table of Contents
 
-- [Overview](#overview)
+- [Overview](#Overview)
 - [Technologies and Stack](#technologies)
 - [Contributing](#features)
 
@@ -20,6 +20,7 @@
 ---
 
 ##Overview
+==========
 **The Map**  
 * Shows all campgrounds in the database (from the recreation.gov api).
 * Shows popups for each campground that includes a link to reserve the campground in recreation.gov.
