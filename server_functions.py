@@ -94,9 +94,8 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
     for campsite in selected_campsites: # circling through list of campsites in a National Park
         camp_id= campsite.facility_id
         avail_dict= get_avail_dictionary(camp_id, start_date, end_date)
-        # campsite_dictionary[campsite.campsite_name]= avail_json_response
-        campsite_dictionary[campsite.campsite_name]= {}
-        campsite_dictionary[campsite.campsite_name]["campground_id"]= campsite.facility_id
+        campsite_dictionary[campsite.campsite_name.title()]= {}
+        campsite_dictionary[campsite.campsite_name.title()]["campground_id"]= campsite.facility_id
         for site in avail_dict['campsites']:
             dates_stayed= len(avail_dict['campsites'][site]['availabilities'])
             i=0
@@ -106,7 +105,7 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
             if i==dates_stayed:
                 available_campsite_list.append(avail_dict['campsites'][site])
     if len(available_campsite_list)!=0:
-        campsite_dictionary[campsite.campsite_name]["availability_data"]=available_campsite_list
+        campsite_dictionary[campsite.campsite_name.title()]["availability_data"]=available_campsite_list
     avail_json= campsite_dictionary
     return avail_json
 
@@ -130,7 +129,7 @@ def generate_availability_dictionary():
 
     for campsite in all_campsites:
         all_campsite_geodata={}
-        all_campsite_geodata['campground_name']=campsite.campsite_name
+        all_campsite_geodata['campground_name']=campsite.campsite_name.title()
         all_campsite_geodata['facility_id']= campsite.facility_id
         all_campsite_geodata['lat']= campsite.campsite_lat
         all_campsite_geodata['long']= campsite.campsite_long
@@ -151,7 +150,7 @@ def generate_availability_dictionary():
         avail_json['dates']= (start_date, end_date)
 
     for campsite in selected_campsites:     # renames items based on their availability
-        np_campground_names.append(campsite.campsite_name)
+        np_campground_names.append(campsite.campsite_name.title())
 
     for campground in all_campsite_list:
         name= campground['campground_name']

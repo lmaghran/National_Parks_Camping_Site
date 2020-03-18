@@ -13,7 +13,7 @@
           <label for="exampleFormControlSelect1">Select a National Park to Begin</label>
               <select id = "npList" name="rec_area">
               {% for rec_area in rec_areas %}
-              <option id ="rec_area" name="rec_area">{{ rec_area.rec_name }}</option>
+              <option id ="rec_area" name="rec_area">{{ rec_area.rec_name.title() }}</option>
               {% endfor %}
               </select>
             <button class="btn btn-primary" type="submit">Select National Park</button>
