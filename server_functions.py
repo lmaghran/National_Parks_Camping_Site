@@ -13,6 +13,7 @@ def rec_area_list():
     return rec_areas
 
 def random_images(rec_areas):
+    """Gets random images for front screen carousel"""
     random_images=[]
 
     while len(random_images)<9:
@@ -27,6 +28,7 @@ def random_images(rec_areas):
 
 
 def get_nps_code(selected_area):
+    """Gets the NPS code of a recreation area"""
 
     #querying for name of rec area
     rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
@@ -35,7 +37,8 @@ def get_nps_code(selected_area):
     return nps_code
 
 def get_np_info(selected_area):
-    working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
+    """Retrieves dictionary from NPS API from NPS code"""
+
     nps_api_key= os.environ['NPS_API_KEY']
     headers = {"apikey": os.environ['NPS_API_KEY'], "accept": "application/json"}
     nps_code= get_nps_code(selected_area)
@@ -48,6 +51,7 @@ def get_np_info(selected_area):
 
 
 def get_nps_photos(nps_code):
+    """Finds each photo in a dictionary from NPS"""
 
     working_Url= "https://developer.nps.gov/api/v1/parks?parkCode=YELL&fields=images&api_key=LhjXYnr7nnTeOSqGDAblu63wpF7a99ml5ahZWzFE"
     nps_api_key= os.environ['NPS_API_KEY']
@@ -62,6 +66,7 @@ def get_nps_photos(nps_code):
 
 
 def get_campsites(selected_area):
+    """Retrieves the list of campsites for each recreation area"""
 
     #querying for name of rec area
     rec_area=Recreation_area.query.filter(Recreation_area.rec_name==selected_area).first()
@@ -70,6 +75,7 @@ def get_campsites(selected_area):
     return selected_campsites
 
 def get_avail_dictionary(camp_id, start_date, end_date):
+    """Returns availability JSON from Recreation.gov"""
     headers={'User-Agent': 'Mozilla/5.0', "accept": "application/json" }
     availability_url=f'http://www.recreation.gov/api/camps/availability/campground/{camp_id}?start_date={start_date}T00%3A00%3A00.000Z&end_date={end_date}T00%3A00%3A00.000Z'
     print(availability_url)
@@ -81,6 +87,7 @@ def get_avail_dictionary(camp_id, start_date, end_date):
 
 
 def generate_campsite_dictionary(selected_campsites, start_date, end_date):
+    """Generates the campsite dictionary of availability based on recreation.gov api response"""
     campsite_dictionary={}
     available_campsite_list=[]
 
@@ -104,24 +111,10 @@ def generate_campsite_dictionary(selected_campsites, start_date, end_date):
     return avail_json
 
 
-def return_cg_lat_long():
-    all_campsites = Campsite.query.filter(Campsite.facility_id != None).\
-            order_by(Campsite.campsite_name).all()
-
-    all_campsite_geodata={}
-    for campsite in all_campsites:
-        all_campsite_geodata[campsite.campsite_name]={}
-        all_campsite_geodata[campsite.campsite_name]['facility_id']= campsite.facility_id
-        all_campsite_geodata[campsite.campsite_name]['campsite_lat']= campsite.campsite_lat
-        all_campsite_geodata[campsite.campsite_name]['campsite_long']= campsite.campsite_long
-        all_campsite_geodata[campsite.campsite_name]['availability']= 'unknown'
-
-
-    return all_campsite_geodata
-
 def datetime_formatting(date):
+    """Formats datetime for display in availability tab"""
     date= datetime.strptime(date, '%Y-%m-%d')
-    date=date.strftime("%b %d %Y")
+    date=date.strftime("%m/%d/%Y")
     return date
 
 

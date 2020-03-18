@@ -48,7 +48,7 @@ def return_np_avail():
 
 if __name__ == "__main__": 
 
-    # app.debug = True #pragma: no cover
+    app.debug = True #pragma: no cover
     connect_to_db(app) #pragma: no cover
     DebugToolbarExtension(app) #pragma: no cover
     app.run(host="0.0.0.0") #pragma: no cover
